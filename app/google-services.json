@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "475814972535",
+    "project_id": "threeamericano",
+    "storage_bucket": "threeamericano.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475814972535:android:a2dbb32e6c893894e90a72",
+        "android_client_info": {
+          "package_name": "com.psw9999.car2smarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475814972535-8aofpkppkn227rs4j1rhgs8i88sf8mcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-lDSgB-xvSX4zBn3vW3RoYt8VMkDp5zE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475814972535-8aofpkppkn227rs4j1rhgs8i88sf8mcc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
