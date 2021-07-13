@@ -12,12 +12,18 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
+
     val database = Firebase.database
     val myRef = database.getReference("name")
     val myRef2 = database.getReference("time")
     val myRef3 = database.getReference("password")
+    val gasStatus = database.getReference("Gascooker")
+    val Appliance = database.getReference("Appliance")
+    //val boilerStatus = database.getReference("Boiler")
+    //val conditionerStatus = database.getReference("Airconditioner")
+    //val cleanerStatus = database.getReference("AirCleaner")
     var test = mutableListOf<String>("","","") // 문자열로 된 빈 컬렉션을 생성
-
+    var temp = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +45,21 @@ class MainActivity : AppCompatActivity() {
             Log.d("EditText","입력된 비밀번호=${test.get(2)}")
         }
 
+        binding.checkGasvalve.setOnCheckedChangeListener { checkBox, isChecked ->
+            if(isChecked) gasStatus.setValue("True")
+            else gasStatus.setValue("False")
+        }
+
         binding.Submit.setOnClickListener {
-            myRef.setValue(test.get(0)) //
-            myRef2.setValue(test.get(1)) //
-            myRef3.setValue(test.get(2)) //
+            myRef.setValue(test.get(0))
+            myRef2.setValue(test.get(1))
+            myRef3.setValue(test.get(2))
+        }
+
+        binding.Read.setOnClickListener {
+            gasStatus.get().addOnSuccessListener{
+                Log.d("Firebase","${it.value}")
+            }
         }
     }
 }
