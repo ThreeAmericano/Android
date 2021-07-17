@@ -25,6 +25,14 @@ class MainActivity : AppCompatActivity() {
     var test = mutableListOf<String>("","","") // 문자열로 된 빈 컬렉션을 생성
     var temp = ""
 
+    // [START auth_fui_create_launcher]
+//    private val signInLauncher = registerForActivityResult(
+//        FirebaseAuthUIActivityResultContract()
+//    ) { res ->
+//        this.onSignInResult(res)
+//    }
+    // [END auth_fui_create_launcher]
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
