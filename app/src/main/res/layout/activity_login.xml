@@ -24,12 +24,14 @@
         android:layout_marginTop="20dp"
         app:srcCompat="@drawable/smarthome" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/IDInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
+        app:hintEnabled = "true"
+        app:hintAnimationEnabled = "true"
         android:hint="ID를 입력하세요."
         android:inputType="textPersonName" />
 
