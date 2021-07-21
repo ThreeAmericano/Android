@@ -1,5 +1,9 @@
 # Android
 
+- 초기 구상도
+- ![image](https://user-images.githubusercontent.com/29484377/126171943-850c0263-bede-4fbd-a3f9-009013226e44.png)
+
+
 
 # Firebase
 
