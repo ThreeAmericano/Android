@@ -35,32 +35,45 @@ class SignupActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        binding.NameInput.addTextChangedListener {
-            SignupName = it.toString()
-        }
-        binding.SingupIDInput.addTextChangedListener {
-            SignupID = it.toString()
-        }
-        binding.SignupPasswordInput.addTextChangedListener {
-            SignupPW = it.toString()
-        }
-        binding.SignupPasswordCheckInput.addTextChangedListener {
-            SignupCheckPW = it.toString()
-        }
+//        binding.NameInput.addTextChangedListener {
+//            SignupName = it.toString()
+//        }
+//        binding.SingupIDInput.addTextChangedListener {
+//            SignupID = it.toString()
+//        }
+//        binding.SignupPasswordInput.addTextChangedListener {
+//            SignupPW = it.toString()
+//        }
+//        binding.SignupPasswordCheckInput.addTextChangedListener {
+//            SignupCheckPW = it.toString()
+//        }
 
 
         // 등록버튼 눌렀을 시 -> 파이어베이스에 ID, PW를 저장한다.
         binding.RegisterButton.setOnClickListener {
-            if(SignupPW.equals(SignupCheckPW)) {
-                createAccount(SignupID,SignupPW)
-            }
-            else {
-                Toast.makeText(baseContext, "비밀번호가 서로 다릅니다. 다시 입력하세요.",
-                    Toast.LENGTH_SHORT).show()
+            SignupName = binding.NameInput.text.toString()
+            SignupID = binding.SingupIDInput.text.toString()
+            SignupPW = binding.SignupPasswordInput.text.toString()
+            SignupCheckPW = binding.SingupIDInput.text.toString()
 
-                // 비밀번호 서로 다르면 해당 editText값 초기화시키기
-                binding.SignupPasswordInput.setText(null)
-                binding.SignupPasswordCheckInput.setText(null)
+            if (SignupName.isEmpty() and SignupID.isEmpty() and SignupPW.isEmpty() and SignupCheckPW.isEmpty()) {
+                Toast.makeText(
+                    baseContext, "항목을 모두 입력해주세요!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                if (SignupPW.equals(SignupCheckPW)) {
+                    createAccount(SignupID, SignupPW)
+                } else {
+                    Toast.makeText(
+                        baseContext, "비밀번호가 서로 다릅니다. 다시 입력하세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // 비밀번호 서로 다르면 해당 editText값 초기화시키기
+                    binding.SignupPasswordInput.setText(null)
+                    binding.SignupPasswordCheckInput.setText(null)
+                }
             }
         }
 
