@@ -14,5 +14,6 @@
 
 # MQTT
 
+- 참조 2: https://stackoverflow.com/questions/52487851/rabbitmq-on-android-and-java/52533194
 - 참조 : https://www.cloudamqp.com/blog/rabbitmq-on-android-studio.html
 
