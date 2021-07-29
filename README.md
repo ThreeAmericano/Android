@@ -12,3 +12,8 @@
 0. RealTime Firebase 설명 : https://www.youtube.com/watch?v=U5aeM5dvUpA&t=78s
 1. Firebase 참고 예제소스 : https://firebase.google.com/docs/database/web/read-and-write?hl=ko
 
+# MQTT
+
+- 참조 2: https://stackoverflow.com/questions/52487851/rabbitmq-on-android-and-java/52533194
+- 참조 : https://www.cloudamqp.com/blog/rabbitmq-on-android-studio.html
+
