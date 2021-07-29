@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.psw9999.car2smarthome">
+
     <!-- 파이어베이스 접근을 위한 인터넷 권한 허용 -->
     <uses-permission android:name="android.permission.INTERNET" />
 

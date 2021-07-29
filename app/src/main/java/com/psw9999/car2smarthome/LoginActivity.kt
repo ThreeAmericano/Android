@@ -23,13 +23,20 @@ import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.databinding.ActivityLoginBinding
 import java.util.concurrent.ConcurrentLinkedDeque
 
+import com.rabbitmq.client.Channel
+import com.rabbitmq.client.Connection
+import com.rabbitmq.client.ConnectionFactory
+import java.io.IOException
+
 class LoginActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
-    //
     private lateinit var ID_value: String
     private lateinit var PW_value: String
+
+    var QUEUE_NAME : String = "icecoffe"
+    val factory = ConnectionFactory()
 
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
@@ -45,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_login)
 
         setContentView(binding.root)
+        init()
 
         val intent = Intent(this, SignupActivity::class.java)
 
@@ -131,6 +139,27 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             // [END sign_in_with_email]
+        }
+
+        private fun init() {
+            try {
+                factory.host = "211.179.42.130"
+                factory.port = 5672
+                factory.username = "admin"
+                factory.password = "1234"
+                val connection = factory.newConnection()
+                val channel = connection.createChannel()
+
+                channel.queueDeclare(QUEUE_NAME,false,false,false,null)
+                var message = "example3"
+
+                channel.basicPublish("",QUEUE_NAME,null,message.toByteArray())
+                channel.close()
+                connection.close()
+            } catch(e : IOException) {
+                
+            }
+
         }
     }
 

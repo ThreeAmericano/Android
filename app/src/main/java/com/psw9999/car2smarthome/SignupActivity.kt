@@ -12,6 +12,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.databinding.ActivitySignupBinding
 
+
 class SignupActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
 
