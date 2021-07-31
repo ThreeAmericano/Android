@@ -12,6 +12,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.databinding.ActivitySignupBinding
 
+import com.rabbitmq.client.Channel
+import com.rabbitmq.client.Connection
+import com.rabbitmq.client.ConnectionFactory
+import kotlin.concurrent.thread
+
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
@@ -20,6 +25,11 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var SignupID : String
     private lateinit var SignupPW : String
     private lateinit var SignupCheckPW : String
+
+    private val factory = ConnectionFactory()
+    private val jobj = org.json.JSONObject()
+
+    private var QUEUE_NAME : String = "icecoffe"
 
     val database = Firebase.database
     val myUsers = database.getReference("users")
@@ -55,7 +65,7 @@ class SignupActivity : AppCompatActivity() {
             SignupName = binding.NameInput.text.toString()
             SignupID = binding.SingupIDInput.text.toString()
             SignupPW = binding.SignupPasswordInput.text.toString()
-            SignupCheckPW = binding.SingupIDInput.text.toString()
+            SignupCheckPW = binding.SignupPasswordCheckInput.text.toString()
 
             if (SignupName.isEmpty() and SignupID.isEmpty() and SignupPW.isEmpty() and SignupCheckPW.isEmpty()) {
                 Toast.makeText(
@@ -63,7 +73,7 @@ class SignupActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                if (SignupPW.equals(SignupCheckPW)) {
+                if (SignupPW == SignupCheckPW) {
                     createAccount(SignupID, SignupPW)
                 } else {
                     Toast.makeText(
@@ -93,16 +103,25 @@ class SignupActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     // 해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                     user?.let {
-                        val uid = user.uid
+                        var uid : String = user.uid
                     }
 
-                    val uids = database.getReference(user!!.uid.toString())
+                    thread(start = true){
+                        jobj.put("uid",user!!.uid)
+                        jobj.put("name",SignupName)
 
-                    //hashMap.put("uid",user!!.uid.toString())
-                    hashMap.put("name",SignupName)
-                    hashMap.put("email",SignupID)
+                        factory.host = "211.179.42.130"
+                        factory.port = 5672
+                        factory.username = "rabbit"
+                        factory.password = "MQ321"
+                        val connection = factory.newConnection()
+                        val channel = connection.createChannel()
 
-                    uids.setValue(hashMap)
+                        channel.queueDeclare(QUEUE_NAME,false,false,false,null)
+                        channel.basicPublish("",QUEUE_NAME,null,jobj.toString().toByteArray())
+                        channel.close()
+                        connection.close()
+                    }
 
                     // 회원가입 성공시 로그인 창으로 돌아감.
                     val loginIntent = Intent(this, LoginActivity::class.java)

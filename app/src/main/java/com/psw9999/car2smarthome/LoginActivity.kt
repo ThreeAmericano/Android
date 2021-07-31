@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -26,7 +27,9 @@ import java.util.concurrent.ConcurrentLinkedDeque
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
+import org.json.JSONObject
 import java.io.IOException
+import kotlin.concurrent.thread
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,8 +38,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var ID_value: String
     private lateinit var PW_value: String
 
-    var QUEUE_NAME : String = "icecoffe"
-    val factory = ConnectionFactory()
+//    private var QUEUE_NAME : String = "icecoffe"
+//    private val factory = ConnectionFactory()
+//    private val jobj = org.json.JSONObject()
 
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
@@ -52,7 +56,28 @@ class LoginActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_login)
 
         setContentView(binding.root)
-        init()
+        //init()
+//        thread(start = true){
+//            jobj.put("uid","test")
+//            jobj.put("name","test")
+//
+//            factory.host = "211.179.42.130"
+//            factory.port = 5672
+//            factory.username = "rabbit"
+//            factory.password = "MQ321"
+//            val connection = factory.newConnection()
+//            val channel = connection.createChannel()
+//
+//            //channel.queueDeclare(QUEUE_NAME,true,true,true,null)
+//            channel.queueDeclare(QUEUE_NAME,false,false,false,null)
+//            //var message = "uid12314"
+//            //var message : String = jobj.toString()
+//            //channel.basicPublish("",QUEUE_NAME,null,message.toByteArray())
+//            channel.basicPublish("",QUEUE_NAME,null,jobj.toString().toByteArray())
+//            //Log.d("mqtt","$jobj.toString().toByteArray()")
+//            channel.close()
+//            connection.close()
+//        }
 
         val intent = Intent(this, SignupActivity::class.java)
 
@@ -65,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
         }
+
         val spannableText = binding.SignupText.text as Spannable
         // 글씨 색과 굵기를 setSpan 한번으로 설정 가능한지 확인
 
@@ -139,27 +165,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             // [END sign_in_with_email]
-        }
-
-        private fun init() {
-            try {
-                factory.host = "211.179.42.130"
-                factory.port = 5672
-                factory.username = "admin"
-                factory.password = "1234"
-                val connection = factory.newConnection()
-                val channel = connection.createChannel()
-
-                channel.queueDeclare(QUEUE_NAME,false,false,false,null)
-                var message = "example3"
-
-                channel.basicPublish("",QUEUE_NAME,null,message.toByteArray())
-                channel.close()
-                connection.close()
-            } catch(e : IOException) {
-                
-            }
-
         }
     }
 
