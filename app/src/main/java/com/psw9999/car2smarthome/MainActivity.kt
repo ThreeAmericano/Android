@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.tabs.TabLayoutMediator
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.ktx.database
@@ -24,5 +25,10 @@ class MainActivity : AppCompatActivity() {
         adapter.fragmentList = fragmentList
 
         binding.viewPager.adapter = adapter
+
+        val tapTitles = listOf<String>("A","B","C")
+        TabLayoutMediator(binding.tabLayout,binding.viewPager) { tab, position ->
+            tab.text = tapTitles[position]
+        }.attach()
     }
 }

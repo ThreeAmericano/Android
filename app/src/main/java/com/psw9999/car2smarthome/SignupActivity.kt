@@ -67,7 +67,7 @@ class SignupActivity : AppCompatActivity() {
             SignupPW = binding.SignupPasswordInput.text.toString()
             SignupCheckPW = binding.SignupPasswordCheckInput.text.toString()
 
-            if (SignupName.isEmpty() and SignupID.isEmpty() and SignupPW.isEmpty() and SignupCheckPW.isEmpty()) {
+            if (SignupName.isEmpty() or SignupID.isEmpty() or SignupPW.isEmpty() or SignupCheckPW.isEmpty()) {
                 Toast.makeText(
                     baseContext, "항목을 모두 입력해주세요!",
                     Toast.LENGTH_SHORT
