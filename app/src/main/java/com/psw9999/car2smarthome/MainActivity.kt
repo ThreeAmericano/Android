@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = FragmentAdapter(this)
         adapter.fragmentList = fragmentList
 
+
         binding.viewPager.adapter = adapter
 
         val tapTitles = listOf<String>("A","B","C")
