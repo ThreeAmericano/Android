@@ -12,7 +12,7 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
-    val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -15,6 +15,7 @@ import com.psw9999.car2smarthome.databinding.ActivitySignupBinding
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
+import java.lang.Exception
 import kotlin.concurrent.thread
 
 
@@ -107,20 +108,38 @@ class SignupActivity : AppCompatActivity() {
                     }
 
                     thread(start = true){
-                        jobj.put("uid",user!!.uid)
-                        jobj.put("name",SignupName)
+                        try {
+                            jobj.put("Producer", "android")
+                            jobj.put("command", "signup")
+                            jobj.put("UID", user!!.uid)
+                            jobj.put("name", SignupName)
 
-                        factory.host = "211.179.42.130"
-                        factory.port = 5672
-                        factory.username = "rabbit"
-                        factory.password = "MQ321"
-                        val connection = factory.newConnection()
-                        val channel = connection.createChannel()
+                            factory.host = "211.179.42.130"
+                            factory.port = 5672
+                            factory.username = "rabbit"
+                            factory.password = "MQ321"
+                            val connection = factory.newConnection()
+                            val channel = connection.createChannel()
 
-                        channel.queueDeclare(QUEUE_NAME,false,false,false,null)
-                        channel.basicPublish("",QUEUE_NAME,null,jobj.toString().toByteArray())
-                        channel.close()
-                        connection.close()
+                            //channel.queueDeclare("webos.topic",false,false,false,null)
+                            channel.basicPublish(
+                                "webos.topic",
+                                "webos.server.info",
+                                null,
+                                jobj.toString().toByteArray()
+                            )
+                            channel.close()
+                            connection.close()
+                        // Thread 실행 중 문제 발생한 경우 다음 catch문 실행
+                        }catch(e : InterruptedException){
+                            e.printStackTrace()
+                        }catch(e : Exception) {
+                            try {
+                                Thread.sleep(5000) // 네트워크등의 문제로 메시지가 다시 돌아오면, 5초 sleep 후 다시 시도
+                            } catch (e1: InterruptedException) {
+                                e1.printStackTrace()
+                            }
+                        }
                     }
 
                     // 회원가입 성공시 로그인 창으로 돌아감.
