@@ -30,8 +30,6 @@ class SignupActivity : AppCompatActivity() {
     private val factory = ConnectionFactory()
     private val jobj = org.json.JSONObject()
 
-    private var QUEUE_NAME : String = "icecoffe"
-
     val database = Firebase.database
     val myUsers = database.getReference("users")
 

@@ -15,20 +15,21 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.ListFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.databinding.ActivityLoginBinding
+import com.rabbitmq.client.*
 import java.util.concurrent.ConcurrentLinkedDeque
 
-import com.rabbitmq.client.Channel
-import com.rabbitmq.client.Connection
-import com.rabbitmq.client.ConnectionFactory
 import org.json.JSONObject
 import java.io.IOException
+import java.lang.Exception
 import kotlin.concurrent.thread
 
 class LoginActivity : AppCompatActivity() {
@@ -45,6 +46,14 @@ class LoginActivity : AppCompatActivity() {
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
 
+    private val singInJSONData = org.json.JSONObject()
+    private val factory = ConnectionFactory()
+    private val consumerTag = "simpleConsumer"
+
+
+
+    private var userName : String? = null
+
     // [END declare_auth]
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,30 +65,9 @@ class LoginActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_login)
 
         setContentView(binding.root)
-        //init()
-//        thread(start = true){
-//            jobj.put("uid","test")
-//            jobj.put("name","test")
-//
-//            factory.host = "211.179.42.130"
-//            factory.port = 5672
-//            factory.username = "rabbit"
-//            factory.password = "MQ321"
-//            val connection = factory.newConnection()
-//            val channel = connection.createChannel()
-//
-//            //channel.queueDeclare(QUEUE_NAME,true,true,true,null)
-//            channel.queueDeclare(QUEUE_NAME,false,false,false,null)
-//            //var message = "uid12314"
-//            //var message : String = jobj.toString()
-//            //channel.basicPublish("",QUEUE_NAME,null,message.toByteArray())
-//            channel.basicPublish("",QUEUE_NAME,null,jobj.toString().toByteArray())
-//            //Log.d("mqtt","$jobj.toString().toByteArray()")
-//            channel.close()
-//            connection.close()
-//        }
 
         val intent = Intent(this, SignupActivity::class.java)
+        val mainIntent = Intent(this, MainActivity::class.java)
 
         // binding.SignupText.setText(spannable, TextView.BufferType.SPANNABLE)
         val clickSpan = object : ClickableSpan() {
@@ -143,15 +131,83 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        Log.d("debug", "$user:success")
+                        Log.d("Login", "$user:success")
                         Toast.makeText(
                             baseContext, "로그인 성공!",
                             Toast.LENGTH_SHORT
                         ).show()
-                        binding.IDInput.setText(null)
-                        binding.PasswordInput.setText(null)
-                        val MainIntent = Intent(this, MainActivity::class.java)
-                        startActivity(MainIntent)
+                        binding.IDInput.text = null
+                        binding.PasswordInput.text = null
+
+                        thread(start = true){
+                            try {
+                                singInJSONData.put("Producer", "android")
+                                singInJSONData.put("command", "signin")
+                                singInJSONData.put("UID", user!!.uid)
+
+                                factory.host = "211.179.42.130"
+                                factory.port = 5672
+                                factory.username = "rabbit"
+                                factory.password = "MQ321"
+                                val connection = factory.newConnection()
+                                val channel = connection.createChannel()
+
+                                channel.basicPublish(
+                                    "webos.topic",
+                                    "webos.server.info",
+                                    null,
+                                    singInJSONData.toString().toByteArray()
+                                )
+
+                                val deliverCallback = DeliverCallback { consumerTag, delivery ->
+                                    var message : String = String(delivery.body)
+                                    val userInfo = JSONObject(message)
+                                    userName = userInfo.getString("name")
+                                    Log.d("Consume","$userName")
+                                }
+
+                                val cancelCallback = CancelCallback { consumerTag : String? ->
+                                    Log.d("Consume","[$consumerTag] was canceled")
+                                }
+
+                                channel.basicConsume("webos.android",true,consumerTag,deliverCallback,cancelCallback)
+                                val bundle = Bundle()
+                                val mainFragment = MainFragment()
+                                bundle.putString("userName",userName)
+                                mainFragment.arguments = bundle
+
+                                val transaction = supportFragmentManager.beginTransaction()
+                                transaction.add(R.id.view_main, mainFragment).commit()
+
+                                channel.close()
+                                connection.close()
+                                // Thread 실행 중 문제 발생한 경우 다음 catch문 실행
+                            }catch(e : InterruptedException){
+                                e.printStackTrace()
+                            }catch(e : Exception) {
+                                try {
+                                    Thread.sleep(5000) // 네트워크등의 문제로 메시지가 다시 돌아오면, 5초 sleep 후 다시 시도
+                                } catch (e1: InterruptedException) {
+                                    e1.printStackTrace()
+                                }
+                            }
+
+                        }
+
+                        val mainIntent = Intent(this, MainActivity::class.java)
+                        //mainIntent.putExtra("userName",userName)
+                        Log.d("Consume2","$userName")
+//                        //Log.d("",)
+//                        val bundle = Bundle()
+//                        val mainFragment = MainFragment()
+//                       bundle.putString("userName",userName)
+//                        mainFragment.arguments = bundle
+////
+//                        val transaction = supportFragmentManager.beginTransaction()
+ //                       transaction.replace(R.id.viewPager,mainFragment).commit()
+
+                        startActivity(mainIntent)
+
                         //updateUI(user)
                     } else {
                         // If sign in fails, display a message to the user.
