@@ -1,8 +1,13 @@
 package com.psw9999.car2smarthome
 
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
 
 
 class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
@@ -16,6 +21,12 @@ class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter
 
     //페이지 요청시 getItem으로 요청되는 페이지의 프래그먼트 1개를 리턴함.
     override fun createFragment(position: Int): Fragment {
+        Log.d("createFragment","true")
+        val fragment = MainFragment()
+        fragment.arguments = Bundle().apply{
+            //putInt("test",10)
+            putString("userName","박승운")
+        }
         return fragmentList[position]
     }
 }
