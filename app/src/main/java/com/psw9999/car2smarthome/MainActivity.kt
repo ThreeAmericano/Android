@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             }.attach()
         }.addOnFailureListener {
             Log.d("firebase","Error")
-            Log.e("firebase","Error getting data",it)
+            Log.e("firebase","Error getting data", it)
         }
 
 //        val fragment = MainFragment()

@@ -21,12 +21,6 @@ class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter
 
     //페이지 요청시 getItem으로 요청되는 페이지의 프래그먼트 1개를 리턴함.
     override fun createFragment(position: Int): Fragment {
-        Log.d("createFragment","true")
-        val fragment = MainFragment()
-        fragment.arguments = Bundle().apply{
-            //putInt("test",10)
-            putString("userName","박승운")
-        }
         return fragmentList[position]
     }
 }
