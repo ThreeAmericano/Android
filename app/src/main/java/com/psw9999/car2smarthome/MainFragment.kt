@@ -83,6 +83,7 @@ class MainFragment : Fragment() {
                 ).show()
             }
         }
+
             return binding.root
     }
 
@@ -120,6 +121,20 @@ class MainFragment : Fragment() {
                     "4" -> binding.airLevel.text = "공기질 : 나쁨"
                     "5" -> binding.airLevel.text = "공기질 : 매우 나쁨"
                 }
+            }
+
+
+            if(MainActivity.applianceStatus.airconEnabled != 0) {
+                binding.airconToggle.isChecked = true
+            }
+            if(MainActivity.applianceStatus.lightEnabled != 0) {
+                binding.lightToggle.isChecked = true
+            }
+            if(MainActivity.applianceStatus.windowStatus != 0) {
+                binding.windowToggle.isChecked = true
+            }
+            if(MainActivity.applianceStatus.gasValveStatus != 0) {
+                binding.gasToggle.isChecked = true
             }
         }
 

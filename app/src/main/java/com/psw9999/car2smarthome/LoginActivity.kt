@@ -44,11 +44,6 @@ class LoginActivity : AppCompatActivity() {
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
 
-    private val singInJSONData = org.json.JSONObject()
-    private val factory = ConnectionFactory()
-    private val consumerTag = "PSW_android"
-
-    private var userName : String? = null
 
     val mainIntent by lazy {Intent(this, MainActivity::class.java)}
     //val mainIntent by lazy {Intent(baseContext, MainActivity::class.java)}
@@ -134,64 +129,10 @@ class LoginActivity : AppCompatActivity() {
                         binding.IDInput.text = null
                         binding.PasswordInput.text = null
 
+                        // firebase에서
                         // 여기서 전달하는 this는 어떤 것?
                         val signInThread = SigninThread(user!!.uid, this)
                         signInThread.start()
-
-//                        thread(start = true){
-//                            try {
-//                                singInJSONData.put("Producer", "android")
-//                                singInJSONData.put("command", "signin")
-//                                singInJSONData.put("UID", user!!.uid)
-//
-//                                factory.host = "211.179.42.130"
-//                                factory.port = 5672
-//                                factory.username = "rabbit"
-//                                factory.password = "MQ321"
-//
-//                                val connection = factory.newConnection()
-//                                val channel = connection.createChannel()
-//
-//                                channel.basicPublish(
-//                                    "webos.topic",
-//                                    "webos.server.info",
-//                                    null,
-//                                    singInJSONData.toString().toByteArray()
-//                                )
-//
-//                                val deliverCallback = DeliverCallback { consumerTag, delivery ->
-//                                    // val meesage?
-//                                    var message : String = String(delivery.body)
-//                                    Log.d("message","$message")
-//                                    val userInfo = JSONObject(message)
-//                                    userName = userInfo.getString("name")
-//                                    Log.d("Consume","$userName")
-//                                    mainIntent.putExtra("userName",userName)
-//                                    startActivity(mainIntent)
-//                                }
-//
-//                                val cancelCallback = CancelCallback { consumerTag : String? ->
-//                                    Log.d("Consume","[$consumerTag] was canceled")
-//                                }
-//
-//
-//                                channel.basicConsume("webos.android",true,consumerTag,deliverCallback,cancelCallback)
-//
-//                                // 나중에 수정 필요!, onresume시 끊기도록 수정할 것
-//                                //channel.close()
-//                                //connection.close()
-//                                // Thread 실행 중 문제 발생한 경우 다음 catch문 실행
-//                            }catch(e : InterruptedException){
-//                                e.printStackTrace()
-//                            }catch(e : Exception) {
-//                                try {
-//                                    Thread.sleep(5000) // 네트워크등의 문제로 메시지가 다시 돌아오면, 5초 sleep 후 다시 시도
-//                                } catch (e1: InterruptedException) {
-//                                    e1.printStackTrace()
-//                                }
-//                            }
-//
-//                        }
 
                     } else {
                         // If sign in fails, display a message to the user.

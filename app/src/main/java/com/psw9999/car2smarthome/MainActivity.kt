@@ -18,9 +18,15 @@ import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
-    private var userName : String? = null
+    // 전역 변수 생성
+    companion object {
+        lateinit var weather: Weather
+        lateinit var applianceStatus: ApplianceStatus
+    }
 
-    private lateinit var database : DatabaseReference
+    private lateinit var userName : String
+
+    //private lateinit var database : DatabaseReference
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
 
@@ -28,25 +34,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        database = Firebase.database.reference
+        //database = Firebase.database.reference
 
-        userName = intent.getStringExtra("userName")
-
-        database.child("sensor").child("openweather").get().addOnSuccessListener {
-            var icon = it?.child("icon")!!.value
-            var temp = it?.child("temp")!!.value
-            var weather = it?.child("description")!!.value
-            var air_level = it?.child("air_level")!!.value
-
-            Log.d("firebaseData","icon = $icon, temp = $temp, weather = $weather, air_level = $air_level")
+        userName = intent.getStringExtra("userName")!!
 
             val fragment = MainFragment()
             fragment.arguments = Bundle().apply {
                 putString("userName","$userName")
-                putString("icon","$icon")
-                putString("temp","$temp")
-                putString("weather","$weather")
-                putString("airLevel","$air_level")
+                putString("icon",weather.icon)
+                putString("temp",weather.temp)
+                putString("weather", weather.description)
+                putString("airLevel", weather.air_level)
+                //putInt("mode", applianceStatus.mode)
             }
 
             val fragmentList = listOf(fragment, SecondFragment(), ThirdFragment())
@@ -60,38 +59,36 @@ class MainActivity : AppCompatActivity() {
             TabLayoutMediator(binding.tabLayout, binding.container) { tab, position ->
                 tab.text = tapTitles[position]
             }.attach()
-        }.addOnFailureListener {
-            Log.d("firebase","Error")
-            Log.e("firebase","Error getting data", it)
-        }
-
-//        val fragment = MainFragment()
-//        fragment.arguments = Bundle().apply {
-//            putString("userName","$userName")
-//            Log.d("bundle","icon = $icon")
-//            putString("icon","$icon")
-//        }
-//
-//
-//        val fragmentList = listOf(fragment, SecondFragment(), ThirdFragment())
-//
-//        // 어댑터 생성하고 앞에서 생성한 프래그먼트의 목록을 저장함. 어댑터의 첫번째 파라미터에는 항상 SupportFragmentManger를 사용
-//        val adapter = FragmentAdapter(this)
-//        adapter.fragmentList = fragmentList
-//        binding.container.adapter = adapter
-//
-//        val tapTitles = listOf<String>("A","B","C")
-//        TabLayoutMediator(binding.tabLayout, binding.container) { tab, position ->
-//            tab.text = tapTitles[position]
-//        }.attach()
     }
 }
 
+// data class : 데이터 보관 목적으로 만든 클래스
+// kotlin의 data class는 생성자, getter&setter 심지어 canonical methods까지 알아서 생성해준다.
 @IgnoreExtraProperties
-data class Received(
-    var airLevel : Int = 0,
-    var temp : Int = 0,
+data class Weather(
+    var air_level : String? = "",
+    var description: String? = "",
     var icon : String? = "",
-    var description : String? = "",
-    var update : String = ""
-)
+    var temp : String? = "",
+    var update : String? = ""
+) {
+
+}
+
+// data class : 데이터 보관 목적으로 만든 클래스
+// kotlin의 data class는 생성자, getter&setter 심지어 canonical methods까지 알아서 생성해준다.
+// 데이터 오수신이나 미수신시 잘못된 명령을 내릴 수 있으므로 default 값은 0 (OFF)로 설정한다.
+@IgnoreExtraProperties
+data class ApplianceStatus(
+    var mode : Int? = 0,
+    var airconEnabled : Int = 0,
+    var windPower : Int = 1,
+    var lightEnabled : Int = 0,
+    var lightBrightness : Int = 1,
+    var lightColor : Int = 0,
+    var lightMod : Int = 0,
+    var windowStatus : Int = 0,
+    var gasValveStatus : Int = 0
+) {
+
+}
