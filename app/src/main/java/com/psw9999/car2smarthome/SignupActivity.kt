@@ -20,7 +20,7 @@ import kotlin.concurrent.thread
 
 
 class SignupActivity : AppCompatActivity() {
-    private lateinit var auth : FirebaseAuth
+    //private lateinit var auth : FirebaseAuth
 
     private lateinit var SignupName : String
     private lateinit var SignupID : String
@@ -31,7 +31,6 @@ class SignupActivity : AppCompatActivity() {
     private val jobj = org.json.JSONObject()
 
     val database = Firebase.database
-    val myUsers = database.getReference("users")
 
     val binding by lazy { ActivitySignupBinding.inflate(layoutInflater)}
 
@@ -43,7 +42,7 @@ class SignupActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_signup)
         setContentView(binding.root)
 
-        auth = Firebase.auth
+        //auth = Firebase.auth
 
 //        binding.NameInput.addTextChangedListener {
 //            SignupName = it.toString()
@@ -87,19 +86,19 @@ class SignupActivity : AppCompatActivity() {
             }
         }
 
-        auth = Firebase.auth
+        //auth = Firebase.auth
 
     }
 
     private fun createAccount(email: String, password: String) {
         // [START create_user_with_email]
-        auth.createUserWithEmailAndPassword(email, password)
+        LoginActivity.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 // 가입 성공시
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("TEST", "createUserWithEmail:success")
-                    val user = auth.currentUser
+                    val user = LoginActivity.auth.currentUser
                     // 해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                     user?.let {
                         var uid : String = user.uid

@@ -23,6 +23,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.ListFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.databinding.ActivityLoginBinding
 import com.rabbitmq.client.*
@@ -35,14 +37,27 @@ import kotlin.concurrent.thread
 
 class LoginActivity : AppCompatActivity() {
 
-    val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+    companion object  {
+        // 객체로 선언할지 변수로 선언할지 고민..
+        // 다른 액티비티에서 객체 생성마다 firebase와 연결시도?
+        lateinit var auth: FirebaseAuth
+        // RealtimeFirebase 정보를 가져와 저장할 객체
+        val realtimeFirebase : DatabaseReference by lazy { Firebase.database.reference }
+    }
 
+    init {
+        // 1. 로그인 작업의 onCreate 메서드에서 FirebaseAuth 객체의 공유 인스턴스로 가져온다.
+        // [START declare_auth]
+        auth = Firebase.auth
+    }
+
+    val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     private lateinit var ID_value: String
     private lateinit var PW_value: String
 
     // [START declare_auth]
-    private lateinit var auth: FirebaseAuth
+    //private lateinit var auth: FirebaseAuth
 
 
     val mainIntent by lazy {Intent(this, MainActivity::class.java)}
@@ -54,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
 
         // [START initialize_auth]
         // 1. 로그인 작업의 onCreate 메서드에서 FirebaseAuth 객체의 공유 인스턴스르 가져온다.
-        auth = Firebase.auth
+        //auth = Firebase.auth
         // [END initialize_auth]
         setContentView(binding.root)
 

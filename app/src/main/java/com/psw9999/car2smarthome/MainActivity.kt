@@ -2,12 +2,13 @@ package com.psw9999.car2smarthome
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.renderscript.Sampler
 import android.util.Log
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.IgnoreExtraProperties
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.rabbitmq.client.CancelCallback
 import com.rabbitmq.client.ConnectionFactory
@@ -24,9 +25,9 @@ class MainActivity : AppCompatActivity() {
         lateinit var applianceStatus: ApplianceStatus
     }
 
-    private lateinit var userName : String
 
-    //private lateinit var database : DatabaseReference
+
+    private lateinit var userName : String
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
 
@@ -34,7 +35,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //database = Firebase.database.reference
+        // 리스너 선언 및 초기화
+        val mValueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                  val post = dataSnapshot.child("status").value.toString().chunked(1)
+//                Log.d("DataChange","$post")
+                applianceStatus.airconEnabled =  post[0].toInt()
+                applianceStatus.windPower =  post[1].toInt()
+                applianceStatus.lightEnabled =  post[2].toInt()
+                applianceStatus.lightBrightness =  post[3].toInt()
+                applianceStatus.lightColor =  post[4].toInt()
+                applianceStatus.lightMod = post[5].toInt()
+                applianceStatus.windowStatus = post[6].toInt()
+                applianceStatus.gasValveStatus = post[7].toInt()
+                Log.d("DataChange", "${applianceStatus}")
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("TAG", "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+
+        // 리스너에 이벤트를 포함시킴.
+        realtimeFirebase.child("smarthome").addValueEventListener(mValueEventListener)
 
         userName = intent.getStringExtra("userName")!!
 

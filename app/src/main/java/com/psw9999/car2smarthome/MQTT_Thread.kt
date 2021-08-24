@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
 import com.rabbitmq.client.CancelCallback
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -56,7 +57,7 @@ open class MQTT_Thread : Thread() {
 
 class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
 
-    private var weatherInfomation : DatabaseReference = Firebase.database.reference
+    //private var weatherInfomation : DatabaseReference = Firebase.database.reference
     private val mainIntent = Intent(mContext, MainActivity::class.java)
 
     val context = mContext
@@ -117,7 +118,7 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         )
 
         //3. firebase에 접근하여 날씨데이터를 취합하여 Weather data class에 저장함.
-        weatherInfomation.child("sensor").child("openweather").get().addOnSuccessListener {
+        realtimeFirebase.child("sensor").child("openweather").get().addOnSuccessListener {
             MainActivity.weather = Weather(
                 air_level = it?.child("air_level")!!.value.toString(),
                 description = it?.child("description")!!.value.toString(),
@@ -138,7 +139,7 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         }
 
         // 4. 현재 모드 상태와 가전 동작 상태를 취합하여 ApplianceStatus에 저장함.
-        weatherInfomation.child("smarthome").get().addOnSuccessListener {
+        realtimeFirebase.child("smarthome").get().addOnSuccessListener {
             var status = it?.child("status")!!.value.toString().chunked(1)
             MainActivity.applianceStatus = ApplianceStatus(
                 mode = it?.child("mode")!!.value.toString().toInt(),
