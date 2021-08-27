@@ -17,6 +17,7 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import org.json.JSONObject
 import java.util.*
+import kotlin.concurrent.thread
 import kotlin.concurrent.timer
 
 // 코틀린은 open 키워드가 없는 경우 다른 곳에서 상속 받지 못하는 final class로 정의됨.
@@ -88,7 +89,7 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
 
         // 매개변수로 context 전달받아 intent 수행.
         mainIntent.putExtra("userName",userName)
-        if(signInStatus == 2) {
+        if(signInStatus == 3) {
             context.startActivity(mainIntent)
         }
     }
@@ -163,4 +164,19 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
             Log.e("firebase", "Error getting data", it)
         }
     }
+}
+
+class ControlThread : MQTT_Thread() {
+
+    fun sendMQTT(message : String) {
+        thread(true) {
+            channel.basicPublish(
+                "webos.topic",
+                "webos.smarthome.info",
+                null,
+                message.toByteArray()
+            )
+        }
+    }
+
 }

@@ -56,8 +56,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var ID_value: String
     private lateinit var PW_value: String
 
+    private val controlThread = ControlThread()
+
     // [START declare_auth]
     //private lateinit var auth: FirebaseAuth
+
 
 
     val mainIntent by lazy {Intent(this, MainActivity::class.java)}

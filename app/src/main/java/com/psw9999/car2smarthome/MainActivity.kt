@@ -35,29 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // 리스너 선언 및 초기화
-        val mValueEventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                  val post = dataSnapshot.child("status").value.toString().chunked(1)
-//                Log.d("DataChange","$post")
-                applianceStatus.airconEnabled =  post[0].toInt()
-                applianceStatus.windPower =  post[1].toInt()
-                applianceStatus.lightEnabled =  post[2].toInt()
-                applianceStatus.lightBrightness =  post[3].toInt()
-                applianceStatus.lightColor =  post[4].toInt()
-                applianceStatus.lightMod = post[5].toInt()
-                applianceStatus.windowStatus = post[6].toInt()
-                applianceStatus.gasValveStatus = post[7].toInt()
-                Log.d("DataChange", "${applianceStatus}")
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("TAG", "loadPost:onCancelled", databaseError.toException())
-            }
-        }
-
-        // 리스너에 이벤트를 포함시킴.
-        realtimeFirebase.child("smarthome").addValueEventListener(mValueEventListener)
 
         userName = intent.getStringExtra("userName")!!
 

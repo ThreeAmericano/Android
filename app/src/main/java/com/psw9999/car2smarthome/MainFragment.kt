@@ -10,9 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.psw9999.car2smarthome.databinding.FragmentMainBinding
+import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +36,39 @@ class MainFragment : Fragment() {
     private var temperature : String? = null
     private var airLevel : String? = null
 
-
     lateinit var binding: FragmentMainBinding
+
+    private val controlThread = ControlThread()
+
+    // 리스너 선언 및 초기화
+    val mValueEventListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val post = dataSnapshot.child("status").value.toString().chunked(1)
+//                Log.d("DataChange","$post")
+            MainActivity.applianceStatus.airconEnabled =  post[0].toInt()
+            MainActivity.applianceStatus.windPower =  post[1].toInt()
+            MainActivity.applianceStatus.lightEnabled =  post[2].toInt()
+            MainActivity.applianceStatus.lightBrightness =  post[3].toInt()
+            MainActivity.applianceStatus.lightColor =  post[4].toInt()
+            MainActivity.applianceStatus.lightMod = post[5].toInt()
+            MainActivity.applianceStatus.windowStatus = post[6].toInt()
+            MainActivity.applianceStatus.gasValveStatus = post[7].toInt()
+            Log.d("DataChange", "${MainActivity.applianceStatus}")
+
+            activity?.runOnUiThread {
+                binding.airconToggle.isChecked = MainActivity.applianceStatus.airconEnabled == 1
+                binding.gasToggle.isChecked = MainActivity.applianceStatus.gasValveStatus == 1
+                binding.lightToggle.isChecked = MainActivity.applianceStatus.lightEnabled == 1
+                binding.windowToggle.isChecked = MainActivity.applianceStatus.windowStatus == 1
+
+            }
+
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            Log.w("TAG", "loadPost:onCancelled", databaseError.toException())
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         userName = arguments?.getString("userName")
@@ -48,6 +82,8 @@ class MainFragment : Fragment() {
             airLevel = it.getString("airLevel")
             Log.d("onCreate","userName = $userName, icon = $icon, weather = $weather")
         }
+        // 리스너에 이벤트를 포함시킴.
+        realtimeFirebase.child("smarthome").addValueEventListener(mValueEventListener)
 
     }
 
@@ -86,6 +122,24 @@ class MainFragment : Fragment() {
             }
         }
 
+        binding.gasToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if (isChecked) {
+                // The toggle is enabled
+                Toast.makeText(
+                    activity, "가스밸브 ON",
+                    Toast.LENGTH_SHORT
+                ).show()
+                controlThread.sendMQTT("022222221")
+            } else {
+                // The toggle is disabled
+                Toast.makeText(
+                    activity, "가스밸브 OFF",
+                    Toast.LENGTH_SHORT
+                ).show()
+                controlThread.sendMQTT("022222220")
+            }
+        }
+
             return binding.root
     }
 
@@ -112,9 +166,11 @@ class MainFragment : Fragment() {
             arguments?.takeIf { it.containsKey("weather") }?.apply {
                 binding.weather.text = "$weather"
             }
+
             arguments?.takeIf { it.containsKey("temp") }?.apply {
                 binding.temperature.text = "$temperature°C"
             }
+
             arguments?.takeIf { it.containsKey("airLevel") }?.apply {
                 when (airLevel) {
                     "1" -> binding.airLevel.text = "공기질 : 매우좋음"
@@ -124,7 +180,6 @@ class MainFragment : Fragment() {
                     "5" -> binding.airLevel.text = "공기질 : 매우 나쁨"
                 }
             }
-
 
             if(MainActivity.applianceStatus.airconEnabled != 0) {
                 binding.airconToggle.isChecked = true
