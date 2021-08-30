@@ -121,6 +121,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        binding.testButton.setOnClickListener {
+            signIn("psw1234@naver.com", "123412")
+        }
+
     }
 
         public override fun onStart() {

@@ -70,7 +70,9 @@ data class Weather(
     var description: String? = "",
     var icon : String? = "",
     var temp : String? = "",
-    var update : String? = ""
+    var update : String? = "",
+    var humidity : Float,
+    var temperature : Float
 ) {
 
 }
@@ -88,7 +90,7 @@ data class ApplianceStatus(
     var lightColor : Int = 0,
     var lightMod : Int = 0,
     var windowStatus : Int = 0,
-    var gasValveStatus : Int = 0
+    var gasValveStatus : Int = 0,
 ) {
 
 }

@@ -119,14 +119,18 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         )
 
         //3. firebase에 접근하여 날씨데이터를 취합하여 Weather data class에 저장함.
-        realtimeFirebase.child("sensor").child("openweather").get().addOnSuccessListener {
+        realtimeFirebase.child("sensor").get().addOnSuccessListener {
             MainActivity.weather = Weather(
-                air_level = it?.child("air_level")!!.value.toString(),
-                description = it?.child("description")!!.value.toString(),
-                icon = it?.child("icon")!!.value.toString(),
-                temp = it?.child("temp")!!.value.toString(),
-                update = it?.child("update")!!.value.toString()
+                air_level = it?.child("openweather")!!.child("air_level")!!.value.toString(),
+                description = it?.child("openweather")!!.child("description")!!.value.toString(),
+                icon = it?.child("openweather")!!.child("icon")!!.value.toString(),
+                temp = it?.child("openweather")!!.child("temp")!!.value.toString(),
+                update = it?.child("openweather")!!.child("update")!!.value.toString(),
+                humidity = it?.child("hometemp")!!.child("humi")!!.value.toString().toFloat(),
+                temperature = it?.child("hometemp")!!.child("temp")!!.value.toString().toFloat(),
             )
+
+
             // 날씨 정보 정상 취합시 1 증가시킴.
             signInStatus += 1
             if (signInStatus == 3) {
@@ -163,6 +167,8 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
             Log.d("firebase weather", "Error")
             Log.e("firebase", "Error getting data", it)
         }
+
+
     }
 }
 

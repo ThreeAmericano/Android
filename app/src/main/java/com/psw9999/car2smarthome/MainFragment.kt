@@ -16,6 +16,7 @@ import com.google.firebase.database.ValueEventListener
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.psw9999.car2smarthome.databinding.FragmentMainBinding
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,7 +45,6 @@ class MainFragment : Fragment() {
     val mValueEventListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val post = dataSnapshot.child("status").value.toString().chunked(1)
-//                Log.d("DataChange","$post")
             MainActivity.applianceStatus.airconEnabled =  post[0].toInt()
             MainActivity.applianceStatus.windPower =  post[1].toInt()
             MainActivity.applianceStatus.lightEnabled =  post[2].toInt()
@@ -56,10 +56,15 @@ class MainFragment : Fragment() {
             Log.d("DataChange", "${MainActivity.applianceStatus}")
 
             activity?.runOnUiThread {
-                binding.airconToggle.isChecked = MainActivity.applianceStatus.airconEnabled == 1
-                binding.gasToggle.isChecked = MainActivity.applianceStatus.gasValveStatus == 1
-                binding.lightToggle.isChecked = MainActivity.applianceStatus.lightEnabled == 1
-                binding.windowToggle.isChecked = MainActivity.applianceStatus.windowStatus == 1
+                if(MainActivity.applianceStatus.airconEnabled == 1) {
+                    if(!binding.aircon.isSelected) {
+                        binding.appliances.selectButton(R.id.aircon)
+                    }
+                }else{
+                    if(binding.aircon.isSelected) {
+                        binding.appliances.selectButton(R.id.aircon)
+                    }
+                }
 
             }
 
@@ -96,42 +101,23 @@ class MainFragment : Fragment() {
             Log.d("onAttach","$userName")
             Log.d("onAttach","$icon")
         }
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 1. 뷰 바인딩 설정
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        // 3.  프래그먼트 레이아웃 뷰 반환
-        binding.airconToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
-            if (isChecked) {
-                // The toggle is enabled
-                Toast.makeText(
-                    activity, "에어컨 ON",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                // The toggle is disabled
-                Toast.makeText(
-                    activity, "에어컨 OFF",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
 
-        binding.gasToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
-            if (isChecked) {
-                // The toggle is enabled
+        binding.gasvalve.setOnClickListener {
+            if(!it.isSelected) {
                 Toast.makeText(
                     activity, "가스밸브 ON",
                     Toast.LENGTH_SHORT
                 ).show()
                 controlThread.sendMQTT("022222221")
-            } else {
-                // The toggle is disabled
+            }
+            else {
                 Toast.makeText(
                     activity, "가스밸브 OFF",
                     Toast.LENGTH_SHORT
@@ -139,6 +125,40 @@ class MainFragment : Fragment() {
                 controlThread.sendMQTT("022222220")
             }
         }
+        // 3.  프래그먼트 레이아웃 뷰 반환
+//        binding.airconToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
+//            if (isChecked) {
+//                // The toggle is enabled
+//                Toast.makeText(
+//                    activity, "에어컨 ON",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            } else {
+//                // The toggle is disabled
+//                Toast.makeText(
+//                    activity, "에어컨 OFF",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//
+//        binding.gasToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
+//            if (isChecked) {
+//                // The toggle is enabled
+//                Toast.makeText(
+//                    activity, "가스밸브 ON",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                controlThread.sendMQTT("022222221")
+//            } else {
+//                // The toggle is disabled
+//                Toast.makeText(
+//                    activity, "가스밸브 OFF",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                controlThread.sendMQTT("022222220")
+//            }
+//        }
 
             return binding.root
     }
@@ -164,35 +184,47 @@ class MainFragment : Fragment() {
                 }
             }
             arguments?.takeIf { it.containsKey("weather") }?.apply {
-                binding.weather.text = "$weather"
+                binding.weather.text = "날씨 : $weather, $temperature°C"
             }
 
-            arguments?.takeIf { it.containsKey("temp") }?.apply {
-                binding.temperature.text = "$temperature°C"
-            }
+//            arguments?.takeIf { it.containsKey("temp") }?.apply {
+//                binding.temperature.text = "$temperature°C"
+//            }
 
             arguments?.takeIf { it.containsKey("airLevel") }?.apply {
                 when (airLevel) {
-                    "1" -> binding.airLevel.text = "공기질 : 매우좋음"
-                    "2" -> binding.airLevel.text = "공기질 : 좋음"
-                    "3" -> binding.airLevel.text = "공기질 : 보통"
-                    "4" -> binding.airLevel.text = "공기질 : 나쁨"
-                    "5" -> binding.airLevel.text = "공기질 : 매우 나쁨"
+                    "1" -> binding.airLevel.text = "미세먼지 : 매우좋음"
+                    "2" -> binding.airLevel.text = "미세먼지 : 좋음"
+                    "3" -> binding.airLevel.text = "미세먼지 : 보통"
+                    "4" -> binding.airLevel.text = "미세먼지 : 나쁨"
+                    "5" -> binding.airLevel.text = "미세먼지 : 매우 나쁨"
                 }
             }
 
             if(MainActivity.applianceStatus.airconEnabled != 0) {
-                binding.airconToggle.isChecked = true
+                //binding.airconToggle.isChecked = true
+                binding.appliances.selectButton(R.id.aircon)
             }
             if(MainActivity.applianceStatus.lightEnabled != 0) {
-                binding.lightToggle.isChecked = true
+                //binding.lightToggle.isChecked = true
+                binding.appliances.selectButton(R.id.light)
             }
             if(MainActivity.applianceStatus.windowStatus != 0) {
-                binding.windowToggle.isChecked = true
+                //binding.windowToggle.isChecked = true
+                binding.appliances.selectButton(R.id.window)
             }
             if(MainActivity.applianceStatus.gasValveStatus != 0) {
-                binding.gasToggle.isChecked = true
+                //binding.gasToggle.isChecked = true
+                binding.appliances.selectButton(R.id.gasvalve)
             }
+
+            binding.humiProgressBar.progress = MainActivity.weather.humidity.toInt()
+            binding.humiTextView.text = "${MainActivity.weather.humidity}%"
+
+            binding.tempProgressBar.progress = MainActivity.weather.temperature.toInt()
+            binding.tempTextView.text = "${MainActivity.weather.temperature}°C"
+
+            binding.modes.selectButton(R.id.outGoingMode)
         }
 
 
