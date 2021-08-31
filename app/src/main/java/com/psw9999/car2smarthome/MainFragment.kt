@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.psw9999.car2smarthome.databinding.FragmentMainBinding
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,6 +58,7 @@ class MainFragment : Fragment() {
             Log.d("DataChange", "${MainActivity.applianceStatus}")
 
             activity?.runOnUiThread {
+                // 추후 status 변수를 만들어 해당 값과 비교하여 ui 변경하도록 수정 필요
                 if(MainActivity.applianceStatus.airconEnabled == 1) {
                     if(!binding.aircon.isSelected) {
                         binding.appliances.selectButton(R.id.aircon)
@@ -65,7 +68,6 @@ class MainFragment : Fragment() {
                         binding.appliances.selectButton(R.id.aircon)
                     }
                 }
-
             }
 
         }
@@ -109,57 +111,24 @@ class MainFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        binding.gasvalve.setOnClickListener {
-            if(!it.isSelected) {
-                Toast.makeText(
-                    activity, "가스밸브 ON",
-                    Toast.LENGTH_SHORT
-                ).show()
-                controlThread.sendMQTT("022222221")
+        binding.gasvalve.setOnClickListener(object : OnSingleClickListener(){
+            override fun onSingleClick(v: View?) {
+                if(!binding.gasvalve.isSelected) {
+                    Toast.makeText(
+                        activity, "가스밸브 ON",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    controlThread.sendMQTT("022222221")
+                }
+                else {
+                    Toast.makeText(
+                        activity, "가스밸브 OFF",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    controlThread.sendMQTT("022222220")
+                }
             }
-            else {
-                Toast.makeText(
-                    activity, "가스밸브 OFF",
-                    Toast.LENGTH_SHORT
-                ).show()
-                controlThread.sendMQTT("022222220")
-            }
-        }
-        // 3.  프래그먼트 레이아웃 뷰 반환
-//        binding.airconToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
-//            if (isChecked) {
-//                // The toggle is enabled
-//                Toast.makeText(
-//                    activity, "에어컨 ON",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            } else {
-//                // The toggle is disabled
-//                Toast.makeText(
-//                    activity, "에어컨 OFF",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//
-//        binding.gasToggle.setOnCheckedChangeListener { compoundButton, isChecked ->
-//            if (isChecked) {
-//                // The toggle is enabled
-//                Toast.makeText(
-//                    activity, "가스밸브 ON",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                controlThread.sendMQTT("022222221")
-//            } else {
-//                // The toggle is disabled
-//                Toast.makeText(
-//                    activity, "가스밸브 OFF",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                controlThread.sendMQTT("022222220")
-//            }
-//        }
-
+        })
             return binding.root
     }
 
@@ -253,4 +222,30 @@ class MainFragment : Fragment() {
                 }
             }
         }
+}
+
+// 중복 클릭 방지를 위한 클래스 구현
+public abstract class OnSingleClickListener : View.OnClickListener {
+
+    // 중복 클릭 방지 시간 설정 (해당 시간 이후에 다시 클릭 가능)
+    private val MIN_CLICK_INTERVAL : Int = 600
+
+    // 마지막 클릭 시간
+    var mLastClickTime : Long = 0
+    abstract fun onSingleClick(v : View?)
+
+    override fun onClick(v: View?) {
+        // 현재 클릭한 시간
+        var currentClickTime: Long = SystemClock.uptimeMillis()
+        // 이전에 클릭한 시간과 현재 시간의 차이
+        var elapsedTime: Long = currentClickTime - mLastClickTime
+        // 마지막 클릭 시간 업데이트
+        mLastClickTime = currentClickTime
+
+        //내가 정한 중복클릭시간 차이를 안넘었으면 클릭이벤트 발생못하게 return
+        if (elapsedTime <= MIN_CLICK_INTERVAL)
+            return
+
+        onSingleClick(v)
+    }
 }

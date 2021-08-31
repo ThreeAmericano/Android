@@ -104,22 +104,44 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.LoginButton.setOnClickListener {
-            ID_value = binding.IDInput.text.toString()
-            PW_value = binding.PasswordInput.text.toString()
+        // 버튼을 여러번 누르면 로그인 요청을 여러번하는 현상이 있어 중복클릭방지 리스너 사용
+//        binding.LoginButton.setOnClickListener {
+//
+//            ID_value = binding.IDInput.text.toString()
+//            PW_value = binding.PasswordInput.text.toString()
+//
+//             //EditText null 값 입력방지
+//            if(ID_value.isEmpty() or PW_value.isEmpty()){
+//                Toast.makeText(
+//                    baseContext, "ID 혹은 PW 값을 입력해주세요!",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//
+//            else {
+//                signIn(ID_value, PW_value)
+//            }
+//        }
 
-             //EditText null 값 입력방지
-            if(ID_value.isEmpty() or PW_value.isEmpty()){
-                Toast.makeText(
-                    baseContext, "ID 혹은 PW 값을 입력해주세요!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        binding.LoginButton.setOnClickListener(object : OnSingleClickListener() {
+            override fun onSingleClick(v: View?) {
+                ID_value = binding.IDInput.text.toString()
+                PW_value = binding.PasswordInput.text.toString()
 
-            else {
-                signIn(ID_value, PW_value)
-            }
-        }
+                 //EditText null 값 입력방지
+                if(ID_value.isEmpty() or PW_value.isEmpty()){
+                    Toast.makeText(
+                        baseContext, "ID 혹은 PW 값을 입력해주세요!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                else {
+                    signIn(ID_value, PW_value)
+                }
+                }
+        })
+
 
         binding.testButton.setOnClickListener {
             signIn("psw1234@naver.com", "123412")
