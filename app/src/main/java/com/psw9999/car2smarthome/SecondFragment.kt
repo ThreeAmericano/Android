@@ -5,6 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
+import com.psw9999.car2smarthome.databinding.FragmentMainBinding
+import com.psw9999.car2smarthome.databinding.FragmentSecondBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +27,10 @@ class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var rvAppliances : RecyclerView
+
+    private lateinit var binding: FragmentSecondBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,8 +44,17 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentSecondBinding.inflate(inflater, container, false)
+
         return inflater.inflate(R.layout.fragment_second, container, false)
     }
+
+    private fun initRecyclerView() {
+        //Level1
+        rvAppliances = binding.recyclerViewAppliance
+    }
+
+
 
     companion object {
         /**

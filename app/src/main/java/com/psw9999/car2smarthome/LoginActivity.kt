@@ -97,6 +97,7 @@ class LoginActivity : AppCompatActivity() {
             18,
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )
+
         spannableText.setSpan(StyleSpan(Typeface.BOLD), 14, 18, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         spannableText.setSpan(clickSpan, 14, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
