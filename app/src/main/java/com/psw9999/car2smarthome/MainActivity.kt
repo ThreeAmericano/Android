@@ -9,6 +9,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.data.Appliance
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.rabbitmq.client.CancelCallback
 import com.rabbitmq.client.ConnectionFactory
@@ -25,11 +26,10 @@ class MainActivity : AppCompatActivity() {
         lateinit var applianceStatus: ApplianceStatus
     }
 
-
-
     private lateinit var userName : String
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

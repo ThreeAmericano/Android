@@ -40,7 +40,7 @@ open class MQTT_Thread : Thread() {
 
     // Connection : Application과 RabbitMQ Broker 사이의 TCP 연결
     // 미리 연결시키는 것이 아닌 객체 생성시 그 때부터 연결 시작
-    protected val connection by lazy {factory.newConnection()!!}
+    protected val connection by lazy { factory.newConnection()!! }
     // Channel : connection 내부에 정의된 가상의 연결, queue에서 데이터를 손볼 때 생기는 일종의 통로 같은 개념
     // !! : 변수가 null이라면 null을 출력하는 것이 아니라 오류를 발생하여 프로그래머에게 알려준다.
     // 변수가 null일 시 KotlinNullPointerException 오류(예외)를 발생시킴.
@@ -62,7 +62,6 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
     private val mainIntent = Intent(mContext, MainActivity::class.java)
 
     val context = mContext
-
     var signInStatus : Int = 0
 
     init {
@@ -128,6 +127,7 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                 update = it?.child("openweather")!!.child("update")!!.value.toString(),
                 humidity = it?.child("hometemp")!!.child("humi")!!.value.toString().toFloat(),
                 temperature = it?.child("hometemp")!!.child("temp")!!.value.toString().toFloat(),
+
             )
 
 
@@ -178,7 +178,7 @@ class ControlThread : MQTT_Thread() {
         thread(true) {
             channel.basicPublish(
                 "webos.topic",
-                "webos.smarthome.info",
+                "webos.smarthome",
                 null,
                 message.toByteArray()
             )

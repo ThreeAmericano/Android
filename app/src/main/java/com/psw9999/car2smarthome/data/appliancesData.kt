@@ -7,5 +7,5 @@ class appliancesData {
 
 data class Appliance(
     val applianceName : String,
-    val applianceDrawable : Drawable
+    val applianceDrawable : Int
 )

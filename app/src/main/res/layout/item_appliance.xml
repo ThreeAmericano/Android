@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="100dp"
     android:layout_height="150dp">
 
     <Button
@@ -20,24 +20,25 @@
 
     <TextView
         android:id="@+id/textView_appliance"
-        app:layout_constraintStart_toStartOf="@+id/button_appliance"
-        app:layout_constraintBottom_toBottomOf = "@+id/button_appliance"
-        app:layout_constraintEnd_toEndOf="@+id/button_appliance"
-        android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="가전"
+        android:textColor="#000000"
         android:textSize="16sp"
-        android:textColor="#1A726655"/>
+        app:layout_constraintBottom_toBottomOf="@+id/button_appliance"
+        app:layout_constraintEnd_toEndOf="@+id/button_appliance"
+        app:layout_constraintStart_toStartOf="@+id/button_appliance" />
 
     <ImageView
         android:id="@+id/imageView_appliance"
-        app:layout_constraintTop_toTopOf="@+id/button_appliance"
-        app:layout_constraintStart_toStartOf="@+id/button_appliance"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/button_appliance"
         app:layout_constraintEnd_toEndOf="@+id/button_appliance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/button_appliance"
+        app:layout_constraintTop_toTopOf="@+id/button_appliance"
         app:srcCompat="@drawable/icon_question" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,9 @@
 package com.psw9999.car2smarthome
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,10 @@ import android.view.Window
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.psw9999.car2smarthome.data.Appliance
 import com.psw9999.car2smarthome.databinding.FragmentMainBinding
 import com.psw9999.car2smarthome.databinding.FragmentSecondBinding
 
@@ -27,9 +34,13 @@ class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var rvAppliances : RecyclerView
-
+    private lateinit var applianceAdapter : ApplianceAdapter
     private lateinit var binding: FragmentSecondBinding
+    //private val activity = context as Activity
+    val applianceDatas = mutableListOf<Appliance>()
+
+    // Access a Cloud Firestore instance from your Activity
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +50,55 @@ class SecondFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSecondBinding.inflate(inflater, container, false)
-
-        return inflater.inflate(R.layout.fragment_second, container, false)
+        binding.switchAircon.setOnCheckedChangeListener { compoundButton, ischedked ->
+            binding.seekBarAirconPower.isEnabled = ischedked
+        }
+        return binding.root
     }
 
-    private fun initRecyclerView() {
-        //Level1
-        rvAppliances = binding.recyclerViewAppliance
+    private fun initRecyclerView(context : Context) {
+        applianceAdapter = ApplianceAdapter(context)
+        //binding.recyclerViewAppliance.adapter = applianceAdapter
+
+        applianceDatas.apply {
+            add(Appliance(applianceName = "에어컨", applianceDrawable = R.drawable.aircon))
+            add(Appliance(applianceName = "전등", applianceDrawable = R.drawable.light))
+            applianceAdapter.appliances = applianceDatas
+            applianceAdapter.notifyDataSetChanged()
+        }
+
+        applianceAdapter.setOnItemClickListener(object : ApplianceAdapter.OnItemClickListener {
+            override fun onItemClick(pos: Int) {
+                Log.d("recycleview","$pos")
+                db.collection("modes")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            Log.d("firebaseStore", "${document.id} => ${document.data}")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("firebaseStore", "Error getting documents: ", exception)
+                    }
+            }
+        })
+
+        binding.recyclerViewAppliance.adapter = applianceAdapter
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context : Context = requireContext()
+        initRecyclerView(context)
     }
 
 

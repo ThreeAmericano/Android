@@ -68,6 +68,15 @@ class MainFragment : Fragment() {
                         binding.appliances.selectButton(R.id.aircon)
                     }
                 }
+                if(MainActivity.applianceStatus.gasValveStatus == 1) {
+                    if(!binding.gasvalve.isSelected) {
+                        binding.appliances.selectButton(R.id.gasvalve)
+                    }
+                }else{
+                    if(binding.gasvalve.isSelected) {
+                        binding.appliances.selectButton(R.id.gasvalve)
+                    }
+                }
             }
 
         }
