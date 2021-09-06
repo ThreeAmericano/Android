@@ -5,4 +5,24 @@
     <item name="cornerFamily">rounded</item>
     <item name="cornerSize">10dp</item>
 </style>
+
+    <!-- Alarm Chip theme -->
+<style name="AlarmChipTheme" parent="Widget.MaterialComponents.Chip.Choice">
+
+    <item name="rippleColor">@color/appGreenColor</item>
+    <item name="chipCornerRadius">120dp</item>
+    <item name="chipMinTouchTargetSize">0dp</item>
+    <item name="chipStrokeWidth">3dp</item>
+    <item name="chipStrokeColor">#000000</item>
+    <item name="checkedIconVisible">true</item>
+</style>
+
+    <style name="Widget.MyApp.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        ...
+        <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.Chip.Choice</item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.Chip.Choice" parent="">
+        <item name="elevationOverlayEnabled">false</item>
+    </style>
 </resources>

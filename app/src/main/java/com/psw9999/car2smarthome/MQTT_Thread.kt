@@ -10,8 +10,11 @@ import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.data.Appliance
+import com.psw9999.car2smarthome.data.mode
 import com.rabbitmq.client.CancelCallback
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -26,8 +29,7 @@ open class MQTT_Thread : Thread() {
     private val factory = ConnectionFactory()
     protected val consumerTag = "PSW_android"
     protected lateinit var message : String
-    protected val timerEscape : Int = 30
-    protected var timerCount : Int = 0
+    protected val firebaseDB = Firebase.firestore
 
     // 초기화 영역, 코틀린은 별도의 생성자 영역이 없기 때문에 init 영역에서 초기화를 해주어야 한다.
     init{
@@ -130,7 +132,6 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
 
             )
 
-
             // 날씨 정보 정상 취합시 1 증가시킴.
             signInStatus += 1
             if (signInStatus == 3) {
@@ -168,9 +169,34 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
             Log.e("firebase", "Error getting data", it)
         }
 
-
+        // 5. 파이어베이스의 클라우드에서 모드 정보 가져오기
+        firebaseDB.collection("modes")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d("firebaseStore", "${document.id} => ${document.data}")
+                    SecondFragment.modeDatas.apply {
+                        add(mode(image = document.data["image"].toString().toInt(),
+                                 modeName = document.data["modeName"].toString(),
+                                 airconEnable = document.data["airconEnable"].toString().toBoolean(),
+                                 airconWindPower = document.data["airconWindPower"].toString().toInt(),
+                                 lightEnable = document.data["lightEnable"].toString().toBoolean(),
+                                 lightBirghtness = document.data["lightBirghtness"].toString().toInt(),
+                                 lightColor = document.data["lightColor"].toString().toInt(),
+                                 lightMode = document.data["lightMode"].toString().toInt(),
+                                 gasValveEnable = document.data["gasValveEnable"].toString().toBoolean(),
+                                 windowOpen = document.data["windowOpen"].toString().toBoolean()
+                        ))
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("firebaseStore", "Error getting documents: ", exception)
+            }
     }
 }
+
+
 
 class ControlThread : MQTT_Thread() {
 

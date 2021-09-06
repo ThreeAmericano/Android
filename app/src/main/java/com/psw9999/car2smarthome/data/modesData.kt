@@ -1,6 +1,7 @@
 package com.psw9999.car2smarthome.data
 
-data class modesData(
+data class mode(
+    var modeName : String,
     var airconEnable : Boolean,
     var airconWindPower : Int,
     var lightEnable : Boolean,
@@ -8,5 +9,6 @@ data class modesData(
     var lightColor : Int,
     var lightMode : Int,
     var windowOpen : Boolean,
-    var gasValveEnable : Boolean
+    var gasValveEnable : Boolean,
+    var image : Int
 )

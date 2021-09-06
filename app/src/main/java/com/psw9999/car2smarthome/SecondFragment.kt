@@ -1,6 +1,5 @@
 package com.psw9999.car2smarthome
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabItem
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.chip.ChipGroup
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.psw9999.car2smarthome.Adapter.ModeAdapter
 import com.psw9999.car2smarthome.data.Appliance
-import com.psw9999.car2smarthome.databinding.FragmentMainBinding
+import com.psw9999.car2smarthome.data.mode
 import com.psw9999.car2smarthome.databinding.FragmentSecondBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,10 +30,8 @@ class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var applianceAdapter : ApplianceAdapter
+    private lateinit var modeAdapter: ModeAdapter
     private lateinit var binding: FragmentSecondBinding
-    //private val activity = context as Activity
-    val applianceDatas = mutableListOf<Appliance>()
 
     // Access a Cloud Firestore instance from your Activity
     val db = Firebase.firestore
@@ -48,10 +42,7 @@ class SecondFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -60,24 +51,33 @@ class SecondFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSecondBinding.inflate(inflater, container, false)
-        binding.switchAircon.setOnCheckedChangeListener { compoundButton, ischedked ->
-            binding.seekBarAirconPower.isEnabled = ischedked
+        binding.switchAircon.setOnCheckedChangeListener { compoundButton, isChecked ->
+            binding.seekBarAirconPower.isEnabled = isChecked
         }
+        binding.switchLight.setOnCheckedChangeListener { compoundButton, isChecked ->
+            binding.seekBarLightBrightness.isEnabled = isChecked
+            binding.chipGroupColor.isClickable = isChecked
+            binding.chipGroupLightMode.isClickable = isChecked
+        }
+        Log.d("secondFragment","${modeDatas[0]}")
+        binding.switchAircon.isChecked = modeDatas[0].airconEnable
+        binding.seekBarAirconPower.progress = (modeDatas[0].airconWindPower)*10
+        binding.switchLight.isChecked = modeDatas[0].lightEnable
+        binding.seekBarLightBrightness.progress = (modeDatas[0].lightBirghtness)*10
+        binding.chipGroupColor.check(modeDatas[0].lightColor)
+        binding.chipGroupLightMode.check(modeDatas[0].lightMode)
+        binding.switchGasValve.isChecked = modeDatas[0].gasValveEnable
+        binding.switchWindow.isChecked = modeDatas[0].windowOpen
         return binding.root
     }
 
     private fun initRecyclerView(context : Context) {
-        applianceAdapter = ApplianceAdapter(context)
-        //binding.recyclerViewAppliance.adapter = applianceAdapter
+        modeAdapter = ModeAdapter(context)
 
-        applianceDatas.apply {
-            add(Appliance(applianceName = "에어컨", applianceDrawable = R.drawable.aircon))
-            add(Appliance(applianceName = "전등", applianceDrawable = R.drawable.light))
-            applianceAdapter.appliances = applianceDatas
-            applianceAdapter.notifyDataSetChanged()
-        }
+        modeAdapter.modes = modeDatas
+        modeAdapter.notifyDataSetChanged()
 
-        applianceAdapter.setOnItemClickListener(object : ApplianceAdapter.OnItemClickListener {
+        modeAdapter.setOnItemClickListener(object : ModeAdapter.OnItemClickListener {
             override fun onItemClick(pos: Int) {
                 Log.d("recycleview","$pos")
                 db.collection("modes")
@@ -93,13 +93,14 @@ class SecondFragment : Fragment() {
             }
         })
 
-        binding.recyclerViewAppliance.adapter = applianceAdapter
+        binding.recyclerViewAppliance.adapter = modeAdapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context : Context = requireContext()
         initRecyclerView(context)
     }
+
 
 
 
@@ -114,6 +115,9 @@ class SecondFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
+
+        var modeDatas = mutableListOf<mode>()
+
         fun newInstance(param1: String, param2: String) =
             SecondFragment().apply {
                 arguments = Bundle().apply {

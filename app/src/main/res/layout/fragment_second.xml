@@ -40,16 +40,15 @@
         app:layout_constraintTop_toTopOf="@id/nestedScrollView"
         android:padding="16dp">
 
-
         <View
             android:id="@+id/division_Aircon"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="20dp"
             android:background="#E4E0E0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textView_Aircon"></View>
+            app:layout_constraintTop_toBottomOf="@id/textView_Aircon"></View>
 
         <ImageView
             android:id="@+id/imageView_Aircon"
@@ -74,10 +73,10 @@
             android:text="에어컨"
             android:textColor="#000000"
             android:layout_marginTop="6dp"
-            android:layout_marginLeft = "60dp"
+            android:layout_marginLeft = "30dp"
             android:textSize = "16dp"
             app:layout_constraintTop_toTopOf="@id/imageView_Aircon"
-            app:layout_constraintStart_toStartOf="@id/imageView_Aircon"
+            app:layout_constraintStart_toEndOf="@id/imageView_Aircon"
             />
 
         <TextView
@@ -98,9 +97,332 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
             android:layout_marginStart="60dp"
+            android:max="100"
             app:layout_constraintStart_toEndOf = "@id/textView_AirPower"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/division_Aircon"/>
+
+        <ImageView
+            android:id="@+id/imageView_Light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_AirPower"
+            android:layout_marginTop="35dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/light" />
+
+        <TextView
+            android:id="@+id/textView_Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="무드등"
+            android:textColor="#000000"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft = "30dp"
+            android:textSize = "16dp"
+            app:layout_constraintTop_toTopOf="@id/imageView_Light"
+            app:layout_constraintStart_toEndOf="@id/imageView_Light"
+            />
+
+        <Switch
+            android:id="@+id/switch_Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/textView_Light"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <View
+            android:id="@+id/division_Light"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:background="#E4E0E0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_Light"></View>
+
+        <TextView
+            android:id="@+id/textView_LightBrightness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:text="밝기"
+            android:textColor="#000000"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@id/imageView_Light"
+            app:layout_constraintTop_toTopOf="@id/division_Light" />
+
+        <TextView
+            android:id="@+id/textView_LightColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="색상"
+            android:textColor="#000000"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@id/imageView_Light"
+            app:layout_constraintTop_toBottomOf="@id/textView_LightBrightness" />
+
+        <SeekBar
+            android:id="@+id/seekBar_LightBrightness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:layout_marginStart="60dp"
+            android:max="100"
+            app:layout_constraintStart_toEndOf = "@id/textView_LightBrightness"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/division_Light"/>
+
+        <HorizontalScrollView
+            android:id = "@+id/horizontalScrollView_LightColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_LightColor">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup_color"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:chipSpacingHorizontal="10dp"
+                app:checkedChip="@id/chip_white"
+                app:singleLine="true"
+                app:singleSelection="true"
+                >
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_red"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="1"
+                    app:chipBackgroundColor="#E30202" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_blue"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="2"
+                    app:chipBackgroundColor="#0220E3" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_green"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="3"
+                    app:chipBackgroundColor="#19E302" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_yellow"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="4"
+                    app:chipBackgroundColor="#FFEB3B" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_purple"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="5"
+                    app:chipBackgroundColor="#673AB7" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_orange"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="6"
+                    app:chipBackgroundColor="#FF5722" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sky"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="7"
+                    app:chipBackgroundColor="#03A9F4" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_white"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="8"
+                    app:chipBackgroundColor="#FFFFFF" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/textView_LightMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="모드"
+            android:textColor="#000000"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@id/imageView_Light"
+            app:layout_constraintTop_toBottomOf="@id/horizontalScrollView_LightColor" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView_LightMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_LightMode">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup_LightMode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:tag="1"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:text="일반모드" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sleep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="2"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:text="슬립모드" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_guide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="3"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:text="안내모드" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_tree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="4"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:text="트리모드" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <ImageView
+            android:id="@+id/imageView_GasValve"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horizontalScrollView_LightMode"
+            android:layout_marginTop="35dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/gasvalve" />
+
+        <TextView
+            android:id="@+id/textView_GasValve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가스밸브"
+            android:textColor="#000000"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft = "30dp"
+            android:textSize = "16dp"
+            app:layout_constraintTop_toTopOf="@id/imageView_GasValve"
+            app:layout_constraintStart_toEndOf="@id/imageView_GasValve"
+            />
+
+        <Switch
+            android:id="@+id/switch_GasValve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/textView_GasValve"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <View
+            android:id="@+id/division_GasValve"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:background="#E4E0E0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_GasValve"></View>
+
+        <ImageView
+            android:id="@+id/imageView_Window"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/division_GasValve"
+            android:layout_marginTop="50dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/window" />
+
+        <TextView
+            android:id="@+id/textView_Window"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="창문"
+            android:textColor="#000000"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft = "30dp"
+            android:textSize = "16dp"
+            app:layout_constraintTop_toTopOf="@id/imageView_Window"
+            app:layout_constraintStart_toEndOf="@id/imageView_Window"
+            />
+
+        <Switch
+            android:id="@+id/switch_Window"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/textView_Window"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <View
+            android:id="@+id/division_Window"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:background="#E4E0E0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_Window"></View>
+
+        <Button
+            android:id="@+id/button_ModeSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="저장"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/division_Window" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,16 +7,18 @@
 
     <Button
         android:id="@+id/button_appliance"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:backgroundTint="@android:color/white"
-        app:strokeWidth="0dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        app:shapeAppearance="@style/HabitListTheme"/>
+        android:checkable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/HabitListTheme"
+        app:strokeWidth="1dp"
+        tools:strokeColor="#605E5E" />
 
     <TextView
         android:id="@+id/textView_appliance"
