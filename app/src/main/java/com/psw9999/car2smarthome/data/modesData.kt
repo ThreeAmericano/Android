@@ -6,9 +6,10 @@ data class mode(
     var airconWindPower : Int,
     var lightEnable : Boolean,
     var lightBirghtness : Int,
-    var lightColor : Int,
-    var lightMode : Int,
+    var lightColor : Int?,
+    var lightMode : Int?,
     var windowOpen : Boolean,
     var gasValveEnable : Boolean,
-    var image : Int
+    var image : Int,
+    var modeNum : Int
 )

@@ -1,13 +1,19 @@
 package com.psw9999.car2smarthome.Adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.psw9999.car2smarthome.R
+import com.psw9999.car2smarthome.SecondFragment
 import com.psw9999.car2smarthome.data.mode
 
 
@@ -18,16 +24,21 @@ class ModeAdapter(val context : Context) : RecyclerView.Adapter<ModeAdapter.Mode
 
     var modes = mutableListOf<mode>()
 
-    // RecyclerView에는 ListView와는 다르게 클릭리스터가 내장되어 있지 않다.
+    // RecyclerView에는 ListView와는 다르게 클릭리스너가 내장되어 있지 않다.
     // 그래서 추가로 ClickListener 역할을 하는 interface를 만들어주어야 한다.
     interface OnItemClickListener{
-        //fun onItemClick(v:View, data: Appliance, pos : Int)
-        fun onItemClick(pos : Int)
+        fun onItemClick(view:View, pos : Int)
+    }
+
+    interface onListItemSelectedInterface {
+        fun onItemSelected(view:View, pos : Int)
     }
 
 
     // 클릭 리스너 선언
-    private lateinit var mItemClickListener: OnItemClickListener
+    lateinit var mItemClickListener: OnItemClickListener
+    lateinit var mSelectedListener : onListItemSelectedInterface
+
     // 클릭 리스너 등록 메서드 (메인 액티비티에서 람다식 혹은 inner 클래스로 호출)
     fun setOnItemClickListener(itemClickListener : OnItemClickListener) {
         mItemClickListener = itemClickListener
@@ -47,26 +58,31 @@ class ModeAdapter(val context : Context) : RecyclerView.Adapter<ModeAdapter.Mode
 
     // onBindViewHolder : position에 해당하는 데이터를 뷰홀더의 아이템 뷰에 표시
     override fun onBindViewHolder(holder: ModeViewHolder, position: Int) {
+
         holder.bind(modes[position])
     }
 
+
     // 아이템 뷰를 저장하는 뷰홀더 클래스
-    inner class ModeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ModeViewHolder(view: View) : RecyclerView.ViewHolder(view){
+
         val applianceName : TextView = itemView.findViewById(R.id.textView_appliance)
         val applianceImage : ImageView = itemView.findViewById(R.id.imageView_appliance)
-
-        //val pos = adapterPosition
-
-        init {
-            itemView.setOnClickListener {
-                mItemClickListener.onItemClick(adapterPosition)
-            }
-        }
-
+        val modeButton : Button = itemView.findViewById(R.id.button_appliance)
 
         fun bind(item : mode) {
             applianceName.text = item.modeName
             applianceImage.setImageResource(item.image)
+            val pos = adapterPosition
+            Log.d("pos","$pos")
+            if(pos!=RecyclerView.NO_POSITION) {
+                modeButton.setOnClickListener {
+                    mItemClickListener?.onItemClick(itemView,pos)
+                }
+            }
+
         }
+
+
     }
 }

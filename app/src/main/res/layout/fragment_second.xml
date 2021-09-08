@@ -190,6 +190,7 @@
                 android:id="@+id/chipGroup_color"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:clipChildren="false"
                 app:chipSpacingHorizontal="10dp"
                 app:checkedChip="@id/chip_white"
                 app:singleLine="true"
@@ -303,7 +304,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:tag="1"
+                    android:tag="9"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:text="일반모드" />
 
@@ -311,7 +312,7 @@
                     android:id="@+id/chip_sleep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="2"
+                    android:tag="10"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:text="슬립모드" />
 
@@ -319,7 +320,7 @@
                     android:id="@+id/chip_guide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="3"
+                    android:tag="11"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:text="안내모드" />
 
@@ -327,7 +328,7 @@
                     android:id="@+id/chip_tree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="4"
+                    android:tag="12"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:text="트리모드" />
             </com.google.android.material.chip.ChipGroup>

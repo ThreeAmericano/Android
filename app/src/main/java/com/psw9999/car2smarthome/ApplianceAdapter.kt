@@ -27,7 +27,7 @@ class ApplianceAdapter(val context : Context) : RecyclerView.Adapter<ApplianceAd
 
 
     // 클릭 리스너 선언
-    private lateinit var mItemClickListener: OnItemClickListener
+    lateinit var mItemClickListener: OnItemClickListener
     // 클릭 리스너 등록 메서드 (메인 액티비티에서 람다식 혹은 inner 클래스로 호출)
     fun setOnItemClickListener(itemClickListener : OnItemClickListener) {
         mItemClickListener = itemClickListener

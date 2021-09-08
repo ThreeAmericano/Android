@@ -185,7 +185,8 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                                  lightColor = document.data["lightColor"].toString().toInt(),
                                  lightMode = document.data["lightMode"].toString().toInt(),
                                  gasValveEnable = document.data["gasValveEnable"].toString().toBoolean(),
-                                 windowOpen = document.data["windowOpen"].toString().toBoolean()
+                                 windowOpen = document.data["windowOpen"].toString().toBoolean(),
+                                 modeNum = document.data["modeNum"].toString().toInt()
                         ))
                     }
                 }

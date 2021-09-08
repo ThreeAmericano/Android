@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,6 +18,7 @@ import com.google.firebase.database.ValueEventListener
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.psw9999.car2smarthome.databinding.FragmentMainBinding
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.SecondFragment.Companion.modeDatas
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import java.util.*
 
@@ -31,8 +33,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class MainFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = "abc"
-
     private var userName : String? = null
     private var icon : String? = null
     private var weather : String? = null
@@ -42,6 +42,42 @@ class MainFragment : Fragment() {
     lateinit var binding: FragmentMainBinding
 
     private val controlThread = ControlThread()
+
+    fun Boolean.toInt() = if (this) 1 else 0
+
+//    val modeClickListener = requireView().setOnClickListener(object : OnSingleClickListener(){
+//        override fun onSingleClick(view: View?) {
+//            var tagValue : Int = view!!.tag.toString().toInt()
+//            Log.d("indoor","${modeDatas[tagValue].modeNum}" +
+//                    "${modeDatas[tagValue].airconEnable.toInt()}" +
+//                    "${modeDatas[tagValue].airconWindPower}" +
+//                    "${modeDatas[tagValue].lightEnable.toInt()}" +
+//                    "${modeDatas[tagValue].lightBirghtness}" +
+//                    "${modeDatas[tagValue].lightColor}" +
+//                    "${modeDatas[tagValue].lightMode}" +
+//                    "${modeDatas[tagValue].gasValveEnable.toInt()}" +
+//                    "${modeDatas[tagValue].windowOpen.toInt()}"
+//            )
+//        }
+//    })
+
+    val modeClickListener = object : OnSingleClickListener() {
+        override fun onSingleClick(view: View?) {
+            var tagValue : Int = view!!.tag.toString().toInt()
+            var SendMessage : String = "${modeDatas[tagValue].modeNum}" +
+                    "${modeDatas[tagValue].airconEnable.toInt()}" +
+                    "${modeDatas[tagValue].airconWindPower}" +
+                    "${modeDatas[tagValue].lightEnable.toInt()}" +
+                    "${modeDatas[tagValue].lightBirghtness}" +
+                    "${modeDatas[tagValue].lightColor}" +
+                    "${(modeDatas[tagValue].lightMode)?.rem(10)}" +
+                    "${modeDatas[tagValue].windowOpen.toInt()}" +
+                    "${modeDatas[tagValue].gasValveEnable.toInt()}"
+            controlThread.sendMQTT(SendMessage)
+            Log.d("Send",SendMessage)
+        }
+    }
+
 
     // 리스너 선언 및 초기화
     val mValueEventListener = object : ValueEventListener {
@@ -120,6 +156,11 @@ class MainFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        binding.inputMode.setOnClickListener(modeClickListener)
+        binding.outGoingMode.setOnClickListener(modeClickListener)
+        binding.testMode.setOnClickListener(modeClickListener)
+        binding.test2Mode.setOnClickListener(modeClickListener)
+
         binding.gasvalve.setOnClickListener(object : OnSingleClickListener(){
             override fun onSingleClick(v: View?) {
                 if(!binding.gasvalve.isSelected) {
@@ -138,7 +179,7 @@ class MainFragment : Fragment() {
                 }
             }
         })
-            return binding.root
+        return binding.root
     }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -202,7 +243,6 @@ class MainFragment : Fragment() {
             binding.tempProgressBar.progress = MainActivity.weather.temperature.toInt()
             binding.tempTextView.text = "${MainActivity.weather.temperature}°C"
 
-            binding.modes.selectButton(R.id.outGoingMode)
         }
 
 
@@ -217,13 +257,6 @@ class MainFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            MainFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
         fun newInstance(param1 : String) =
             MainFragment().apply {
                 arguments = Bundle().apply {

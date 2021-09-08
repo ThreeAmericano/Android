@@ -75,7 +75,6 @@ class LoginActivity : AppCompatActivity() {
         //auth = Firebase.auth
         // [END initialize_auth]
         setContentView(binding.root)
-
         val intent = Intent(this, SignupActivity::class.java)
 
         // binding.SignupText.setText(spannable, TextView.BufferType.SPANNABLE)
