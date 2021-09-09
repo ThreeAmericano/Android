@@ -106,13 +106,13 @@
         app:layout_constraintTop_toBottomOf="@+id/division">
 
         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-            android:id="@+id/outGoingMode"
+            android:id="@+id/inputMode"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "0"
+            android:tag = "1"
             app:layout_flexGrow="1"
-            app:toggle_icon="@drawable/outdoor"
+            app:toggle_icon="@drawable/indoor"
             app:toggle_iconPaddingHorizontal="5dp"
             app:toggle_iconPaddingTop="5dp"
             app:toggle_selectedBackgroundColor="#5e6fed"
@@ -126,13 +126,13 @@
             tools:layout_editor_absoluteX="10dp" />
 
         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-            android:id="@+id/inputMode"
+            android:id="@+id/outGoingMode"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "1"
+            android:tag = "2"
             app:layout_flexGrow="1"
-            app:toggle_icon="@drawable/indoor"
+            app:toggle_icon="@drawable/outdoor"
             app:toggle_iconPaddingHorizontal="5dp"
             app:toggle_iconPaddingTop="5dp"
             app:toggle_selectedBackgroundColor="#5e6fed"
@@ -151,7 +151,7 @@
             android:layout_height="200dp"
             android:gravity="center"
             app:layout_flexGrow="1"
-            android:tag = "2"
+            android:tag = "3"
             app:toggle_icon="@drawable/sleep"
             app:toggle_iconPaddingHorizontal="5dp"
             app:toggle_iconPaddingTop="5dp"
@@ -170,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "3"
+            android:tag = "4"
             app:layout_flexGrow="1"
             app:toggle_icon="@drawable/eco"
             app:toggle_iconPaddingHorizontal="5dp"

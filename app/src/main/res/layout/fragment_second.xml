@@ -203,7 +203,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="1"
+                    android:tag="0"
                     app:chipBackgroundColor="#E30202" />
 
                 <com.google.android.material.chip.Chip
@@ -212,7 +212,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="2"
+                    android:tag="1"
                     app:chipBackgroundColor="#0220E3" />
 
                 <com.google.android.material.chip.Chip
@@ -221,7 +221,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="3"
+                    android:tag="2"
                     app:chipBackgroundColor="#19E302" />
 
                 <com.google.android.material.chip.Chip
@@ -230,7 +230,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="4"
+                    android:tag="3"
                     app:chipBackgroundColor="#FFEB3B" />
 
                 <com.google.android.material.chip.Chip
@@ -239,7 +239,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="5"
+                    android:tag="4"
                     app:chipBackgroundColor="#673AB7" />
 
                 <com.google.android.material.chip.Chip
@@ -248,7 +248,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="6"
+                    android:tag="5"
                     app:chipBackgroundColor="#FF5722" />
 
                 <com.google.android.material.chip.Chip
@@ -257,7 +257,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="7"
+                    android:tag="6"
                     app:chipBackgroundColor="#03A9F4" />
 
                 <com.google.android.material.chip.Chip
@@ -266,7 +266,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="8"
+                    android:tag="7"
                     app:chipBackgroundColor="#FFFFFF" />
 
             </com.google.android.material.chip.ChipGroup>

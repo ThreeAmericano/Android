@@ -66,15 +66,6 @@ class ApplianceAdapter(val context : Context) : RecyclerView.Adapter<ApplianceAd
         fun bind(item : Appliance) {
             applianceName.text = item.applianceName
             applianceImage.setImageResource(item.applianceDrawable)
-//            val pos = adapterPosition
-//            if(pos != RecyclerView.NO_POSITION)
-//            {
-//                Log.d("recyclerview","OK")
-//                itemView.setOnClickListener {
-//                    Log.d("recyclerview","OK")
-//                    listner?.onItemClick(itemView,item,pos)
-//                }
-//            }
         }
     }
 }

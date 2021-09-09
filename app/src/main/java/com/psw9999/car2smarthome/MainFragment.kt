@@ -63,7 +63,7 @@ class MainFragment : Fragment() {
 
     val modeClickListener = object : OnSingleClickListener() {
         override fun onSingleClick(view: View?) {
-            var tagValue : Int = view!!.tag.toString().toInt()
+            var tagValue : Int = view!!.tag.toString().toInt()-1
             var SendMessage : String = "${modeDatas[tagValue].modeNum}" +
                     "${modeDatas[tagValue].airconEnable.toInt()}" +
                     "${modeDatas[tagValue].airconWindPower}" +
@@ -83,18 +83,26 @@ class MainFragment : Fragment() {
     val mValueEventListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val post = dataSnapshot.child("status").value.toString().chunked(1)
-            MainActivity.applianceStatus.airconEnabled =  post[0].toInt()
-            MainActivity.applianceStatus.windPower =  post[1].toInt()
-            MainActivity.applianceStatus.lightEnabled =  post[2].toInt()
-            MainActivity.applianceStatus.lightBrightness =  post[3].toInt()
-            MainActivity.applianceStatus.lightColor =  post[4].toInt()
-            MainActivity.applianceStatus.lightMod = post[5].toInt()
-            MainActivity.applianceStatus.windowStatus = post[6].toInt()
-            MainActivity.applianceStatus.gasValveStatus = post[7].toInt()
+            MainActivity.applianceStatus.mode = post[0].toInt()
+            MainActivity.applianceStatus.airconEnabled =  post[1].toInt()
+            MainActivity.applianceStatus.windPower =  post[2].toInt()
+            MainActivity.applianceStatus.lightEnabled =  post[3].toInt()
+            MainActivity.applianceStatus.lightBrightness =  post[4].toInt()
+            MainActivity.applianceStatus.lightColor =  post[5].toInt()
+            MainActivity.applianceStatus.lightMod = post[6].toInt()
+            MainActivity.applianceStatus.windowStatus = post[7].toInt()
+            MainActivity.applianceStatus.gasValveStatus = post[8].toInt()
             Log.d("DataChange", "${MainActivity.applianceStatus}")
 
             activity?.runOnUiThread {
                 // 추후 status 변수를 만들어 해당 값과 비교하여 ui 변경하도록 수정 필요
+                when(MainActivity.applianceStatus.mode) {
+                    1 -> binding.modes.selectButton(R.id.inputMode)
+                    2 -> binding.modes.selectButton(R.id.outGoingMode)
+                    3 -> binding.modes.selectButton(R.id.testMode)
+                    4 -> binding.modes.selectButton(R.id.test2Mode)
+                    //else -> binding.modes.selectButton()
+                }
                 if(MainActivity.applianceStatus.airconEnabled == 1) {
                     if(!binding.aircon.isSelected) {
                         binding.appliances.selectButton(R.id.aircon)
@@ -104,6 +112,7 @@ class MainFragment : Fragment() {
                         binding.appliances.selectButton(R.id.aircon)
                     }
                 }
+
                 if(MainActivity.applianceStatus.gasValveStatus == 1) {
                     if(!binding.gasvalve.isSelected) {
                         binding.appliances.selectButton(R.id.gasvalve)
@@ -111,6 +120,26 @@ class MainFragment : Fragment() {
                 }else{
                     if(binding.gasvalve.isSelected) {
                         binding.appliances.selectButton(R.id.gasvalve)
+                    }
+                }
+
+                if(MainActivity.applianceStatus.lightEnabled == 1) {
+                    if(!binding.light.isSelected) {
+                        binding.appliances.selectButton(R.id.light)
+                    }
+                }else{
+                    if(binding.light.isSelected) {
+                        binding.appliances.selectButton(R.id.light)
+                    }
+                }
+
+                if(MainActivity.applianceStatus.windowStatus == 1) {
+                    if(!binding.window.isSelected) {
+                        binding.appliances.selectButton(R.id.window)
+                    }
+                }else{
+                    if(binding.window.isSelected) {
+                        binding.appliances.selectButton(R.id.window)
                     }
                 }
             }

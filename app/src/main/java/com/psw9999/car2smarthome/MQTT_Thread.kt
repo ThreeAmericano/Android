@@ -148,15 +148,16 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         realtimeFirebase.child("smarthome").get().addOnSuccessListener {
             var status = it?.child("status")!!.value.toString().chunked(1)
             MainActivity.applianceStatus = ApplianceStatus(
-                mode = it?.child("mode")!!.value.toString().toInt(),
-                airconEnabled = status[0].toInt(),
-                windPower =  status[1].toInt(),
-                lightEnabled = status[2].toInt(),
-                lightBrightness = status[3].toInt(),
-                lightColor = status[4].toInt(),
-                lightMod = status[5].toInt(),
-                windowStatus = status[6].toInt(),
-                gasValveStatus = status[7].toInt(),
+                //mode = it?.child("mode")!!.value.toString().toInt(),
+                mode = status[0].toInt(),
+                airconEnabled = status[1].toInt(),
+                windPower =  status[2].toInt(),
+                lightEnabled = status[3].toInt(),
+                lightBrightness = status[4].toInt(),
+                lightColor = status[5].toInt(),
+                lightMod = status[6].toInt(),
+                windowStatus = status[7].toInt(),
+                gasValveStatus = status[8].toInt(),
             )
             signInStatus += 1
             if (signInStatus == 3) {
