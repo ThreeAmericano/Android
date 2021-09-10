@@ -17,6 +17,8 @@
     <item name="checkedIconVisible">true</item>
 </style>
 
+
+
     <style name="Widget.MyApp.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
         ...
         <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.Chip.Choice</item>

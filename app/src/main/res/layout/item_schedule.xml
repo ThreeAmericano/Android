@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="160dp">
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_schedule"
+        app:layout_constraintBottom_toTopOf="@+id/view_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:shapeAppearance="@style/HabitListTheme"
+        app:strokeWidth = "0dp"
+        android:backgroundTint="@android:color/white"
+        />
+
+    <TextView
+        android:id="@+id/textView_scheduleName"
+        app:layout_constraintTop_toTopOf="@+id/button_schedule"
+        app:layout_constraintStart_toStartOf="@+id/button_schedule"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test Title"
+        android:textSize="22sp"
+        android:textColor="#4A4646"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView_time"
+        app:layout_constraintTop_toTopOf="@+id/button_schedule"
+        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
+        app:layout_constraintStart_toStartOf="@+id/button_schedule"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XX시 XX분"
+        android:textSize="22sp"
+        android:textColor="#4A4646"
+         />
+
+    <TextView
+        android:id="@+id/textView_oneTime"
+        app:layout_constraintTop_toTopOf="@+id/button_schedule"
+        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
+        app:layout_constraintEnd_toStartOf="@+id/switch_scheduleEnable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:text="X월 X일"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/textView_Sun"
+        android:tag="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Mon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:text="일"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView_Mon"
+        android:tag="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Tue"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:text="월"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView_Tue"
+        android:tag="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Wed"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:text="화"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView_Wed"
+        android:tag="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Thu"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:text="수"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView_Thu"
+        android:tag="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Fri"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:text="목"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView_Fri"
+        android:tag="5"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Sat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:text="금"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView_Sat"
+        android:tag="6"
+        app:layout_constraintStart_toStartOf="@+id/switch_scheduleEnable"
+        app:layout_constraintEnd_toEndOf="@+id/button_schedule"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="5dp"
+        android:text="토"
+        android:textColor="@android:color/black"
+        android:background="@drawable/background_dayofweek_default"
+        android:gravity="center" />
+
+    <Switch
+        android:id="@+id/switch_scheduleEnable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/button_schedule"
+        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
+        app:layout_constraintEnd_toEndOf="@id/button_schedule"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

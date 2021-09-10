@@ -11,10 +11,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.ThirdFragment.Companion.scheduleDatas
 import com.psw9999.car2smarthome.data.Appliance
 import com.psw9999.car2smarthome.data.mode
+import com.psw9999.car2smarthome.data.scheduleData
 import com.rabbitmq.client.CancelCallback
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -182,7 +185,7 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                                  airconEnable = document.data["airconEnable"].toString().toBoolean(),
                                  airconWindPower = document.data["airconWindPower"].toString().toInt(),
                                  lightEnable = document.data["lightEnable"].toString().toBoolean(),
-                                 lightBirghtness = document.data["lightBirghtness"].toString().toInt(),
+                                 lightBrightness = document.data["lightBrightness"].toString().toInt(),
                                  lightColor = document.data["lightColor"].toString().toInt(),
                                  lightMode = document.data["lightMode"].toString().toInt(),
                                  gasValveEnable = document.data["gasValveEnable"].toString().toBoolean(),
@@ -195,6 +198,28 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
             .addOnFailureListener { exception ->
                 Log.d("firebaseStore", "Error getting documents: ", exception)
             }
+
+        // 6. 파이어베이스의 클라우드에서 스케줄 정보 가져오기
+        firebaseDB.collection("schedule_mode")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    scheduleDatas.apply {
+                        val scheduleData = document.toObject<scheduleData>()
+//                        add(scheduleData(
+//                            scheduleName = document.data["Title"].toString(),
+//                            uid = document.data["UID"].toString(),
+//                            repeat = document.data["repeat"].toString().toBoolean(),
+//                            modeNum = document.data["modeNum"].toString().toInt(),
+//                            Active_data = document.data["Active_data"].toString(),
+//                            Enabled = document.data["Enabled"].toString().toBoolean(),
+//                            Daysofweek = document.data["Daysofweek"].apply { for(i) }
+//                        ))
+                        add(scheduleData)
+                    }
+                }
+            }
+
     }
 }
 

@@ -58,7 +58,6 @@ class ModeAdapter(val context : Context) : RecyclerView.Adapter<ModeAdapter.Mode
 
     // onBindViewHolder : position에 해당하는 데이터를 뷰홀더의 아이템 뷰에 표시
     override fun onBindViewHolder(holder: ModeViewHolder, position: Int) {
-
         holder.bind(modes[position])
     }
 

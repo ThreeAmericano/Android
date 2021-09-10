@@ -68,7 +68,7 @@ class MainFragment : Fragment() {
                     "${modeDatas[tagValue].airconEnable.toInt()}" +
                     "${modeDatas[tagValue].airconWindPower}" +
                     "${modeDatas[tagValue].lightEnable.toInt()}" +
-                    "${modeDatas[tagValue].lightBirghtness}" +
+                    "${modeDatas[tagValue].lightBrightness}" +
                     "${modeDatas[tagValue].lightColor}" +
                     "${(modeDatas[tagValue].lightMode)?.rem(10)}" +
                     "${modeDatas[tagValue].windowOpen.toInt()}" +
@@ -95,7 +95,7 @@ class MainFragment : Fragment() {
             Log.d("DataChange", "${MainActivity.applianceStatus}")
 
             activity?.runOnUiThread {
-                // 추후 status 변수를 만들어 해당 값과 비교하여 ui 변경하도록 수정 필요
+                // 추후 status 변수를 만들어 해당 값과 비교하여 ui 변경하도록 수정 필요b
                 when(MainActivity.applianceStatus.mode) {
                     1 -> binding.modes.selectButton(R.id.inputMode)
                     2 -> binding.modes.selectButton(R.id.outGoingMode)

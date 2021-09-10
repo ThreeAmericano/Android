@@ -83,7 +83,7 @@ class SecondFragment : Fragment(){
             modeDatas[curPos].airconEnable = binding.switchAircon.isChecked
             modeDatas[curPos].airconWindPower = ((binding.seekBarAirconPower.progress)/10)
             modeDatas[curPos].lightEnable = binding.switchLight.isChecked
-            modeDatas[curPos].lightBirghtness = (binding.seekBarLightBrightness.progress)/10
+            modeDatas[curPos].lightBrightness = (binding.seekBarLightBrightness.progress)/10
             modeDatas[curPos].gasValveEnable = binding.switchGasValve.isChecked
             modeDatas[curPos].windowOpen = binding.switchWindow.isChecked
             modeDatas[curPos].lightColor = binding.chipGroupColor.getChildrenTag()
@@ -102,7 +102,7 @@ class SecondFragment : Fragment(){
                 binding.switchAircon.isChecked = modeDatas[curPos].airconEnable
                 binding.seekBarAirconPower.progress = (modeDatas[curPos].airconWindPower)*10
                 binding.switchLight.isChecked = modeDatas[curPos].lightEnable
-                binding.seekBarLightBrightness.progress = (modeDatas[curPos].lightBirghtness)*10
+                binding.seekBarLightBrightness.progress = (modeDatas[curPos].lightBrightness)*10
                 binding.switchGasValve.isChecked = modeDatas[curPos].gasValveEnable
                 binding.switchWindow.isChecked = modeDatas[curPos].windowOpen
                 binding.chipGroupColor.clearCheck()
@@ -121,7 +121,7 @@ class SecondFragment : Fragment(){
         binding.switchAircon.isChecked = modeDatas[0].airconEnable
         binding.seekBarAirconPower.progress = (modeDatas[0].airconWindPower)*10
         binding.switchLight.isChecked = modeDatas[0].lightEnable
-        binding.seekBarLightBrightness.progress = (modeDatas[0].lightBirghtness)*10
+        binding.seekBarLightBrightness.progress = (modeDatas[0].lightBrightness)*10
         binding.switchGasValve.isChecked = modeDatas[0].gasValveEnable
         binding.switchWindow.isChecked = modeDatas[0].windowOpen
         view.findViewWithTag<Chip>(modeDatas[0].lightColor.toString())?.isChecked = true
