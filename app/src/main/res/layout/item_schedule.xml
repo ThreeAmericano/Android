@@ -11,23 +11,25 @@
         android:layout_height="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <Button
         android:id="@+id/button_schedule"
-        app:layout_constraintBottom_toTopOf="@+id/view_divider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        app:shapeAppearance="@style/HabitListTheme"
-        app:strokeWidth = "0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@android:color/white"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/view_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:shapeAppearance="@style/HabitListTheme"
+        app:strokeWidth="1dp" />
 
     <TextView
         android:id="@+id/textView_scheduleName"
@@ -43,16 +45,15 @@
 
     <TextView
         android:id="@+id/textView_time"
-        app:layout_constraintTop_toTopOf="@+id/button_schedule"
-        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
-        app:layout_constraintStart_toStartOf="@+id/button_schedule"
-        android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:text="XX시 XX분"
-        android:textSize="22sp"
         android:textColor="#4A4646"
-         />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
+        app:layout_constraintStart_toStartOf="@+id/button_schedule"
+        app:layout_constraintTop_toTopOf="@+id/button_schedule" />
 
     <TextView
         android:id="@+id/textView_oneTime"

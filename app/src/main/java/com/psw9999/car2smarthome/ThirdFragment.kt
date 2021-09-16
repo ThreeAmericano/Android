@@ -1,16 +1,14 @@
 package com.psw9999.car2smarthome
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.psw9999.car2smarthome.Adapter.ModeAdapter
 import com.psw9999.car2smarthome.Adapter.SchedulesAdapter
-import com.psw9999.car2smarthome.data.mode
 import com.psw9999.car2smarthome.data.scheduleData
-import com.psw9999.car2smarthome.databinding.FragmentSecondBinding
 import com.psw9999.car2smarthome.databinding.FragmentThirdBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,6 +29,8 @@ class ThirdFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var scheduleIntent : Intent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -46,22 +46,25 @@ class ThirdFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentThirdBinding.inflate(inflater, container, false)
         val context : Context = requireContext()
+        scheduleIntent = Intent(context, ScheduleActivity::class.java)
         initRecyclerView(context)
         return binding.root
-        //return inflater.inflate(R.layout.fragment_third, container, false)
     }
 
     private fun initRecyclerView(context : Context) {
         schedulesAdapter = SchedulesAdapter(context)
         schedulesAdapter.schedules = scheduleDatas
+        schedulesAdapter.setOnScheduleClickListener(object : SchedulesAdapter.OnScheduleItemClickListener {
+            override fun onItemClick(view: View, pos: Int) {
+                startActivity(scheduleIntent)
+            }
+        })
         schedulesAdapter.notifyDataSetChanged()
         binding.recyclerViewScheduleList.adapter = schedulesAdapter
     }
 
     companion object {
-
         var scheduleDatas = mutableListOf<scheduleData>()
-
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

@@ -13,9 +13,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.psw9999.car2smarthome.AlarmFragment.Companion.alarmDatas
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
 import com.psw9999.car2smarthome.ThirdFragment.Companion.scheduleDatas
 import com.psw9999.car2smarthome.data.Appliance
+import com.psw9999.car2smarthome.data.alarmData
 import com.psw9999.car2smarthome.data.mode
 import com.psw9999.car2smarthome.data.scheduleData
 import com.rabbitmq.client.CancelCallback
@@ -206,20 +208,27 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                 for (document in result) {
                     scheduleDatas.apply {
                         val scheduleData = document.toObject<scheduleData>()
-//                        add(scheduleData(
-//                            scheduleName = document.data["Title"].toString(),
-//                            uid = document.data["UID"].toString(),
-//                            repeat = document.data["repeat"].toString().toBoolean(),
-//                            modeNum = document.data["modeNum"].toString().toInt(),
-//                            Active_data = document.data["Active_data"].toString(),
-//                            Enabled = document.data["Enabled"].toString().toBoolean(),
-//                            Daysofweek = document.data["Daysofweek"].apply { for(i) }
-//                        ))
                         add(scheduleData)
                     }
                 }
             }
+            .addOnFailureListener { exception ->
+                Log.d("firebaseStore", "Error getting documents: ", exception)
+            }
 
+        // 7. 파이어베이스의 클라우드에서 알람 정보 가져오기
+        firebaseDB.collection("appliance_alarm")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    alarmDatas.apply{
+                        add(document.toObject<alarmData>())
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("firebaseStore", "Error getting documents: ", exception)
+            }
     }
 }
 

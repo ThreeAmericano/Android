@@ -12,12 +12,15 @@
     <item name="rippleColor">@color/appGreenColor</item>
     <item name="chipCornerRadius">120dp</item>
     <item name="chipMinTouchTargetSize">0dp</item>
-    <item name="chipStrokeWidth">3dp</item>
+    <item name="chipStrokeWidth">0dp</item>
     <item name="chipStrokeColor">#000000</item>
     <item name="checkedIconVisible">true</item>
 </style>
 
-
+    <style name="AlarmChipTextTheme" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">5dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="Widget.MyApp.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
         ...

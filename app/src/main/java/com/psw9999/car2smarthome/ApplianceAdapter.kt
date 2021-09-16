@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.psw9999.car2smarthome.data.Appliance
+import com.psw9999.car2smarthome.data.alarmData
+import com.psw9999.car2smarthome.data.scheduleData
 
 // 어댑터 및 뷰홀더 상속/구현
 // 뷰 홀더 : 스크롤을 밑으로 내리면 리사이클러뷰는 가장 위에 있던 뷰를 가장 아래쪽으로 이동시켜 재활용한다.

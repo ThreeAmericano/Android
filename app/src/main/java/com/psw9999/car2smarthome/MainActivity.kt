@@ -48,16 +48,16 @@ class MainActivity : AppCompatActivity() {
                 //putInt("mode", applianceStatus.mode)
             }
 
-            val fragmentList = listOf(fragment, SecondFragment(), ThirdFragment())
+            val fragmentList = listOf(fragment, SecondFragment(), ThirdFragment(), AlarmFragment())
 
             // 어댑터 생성하고 앞에서 생성한 프래그먼트의 목록을 저장함. 어댑터의 첫번째 파라미터에는 항상 SupportFragmentManger를 사용
             val adapter = FragmentAdapter(this)
             adapter.fragmentList = fragmentList
             binding.container.adapter = adapter
 
-            val tapTitles = listOf<String>("A","B","C")
+            var tabImageView = listOf<Int>(R.drawable.home,R.drawable.mode,R.drawable.event,R.drawable.bell)
             TabLayoutMediator(binding.tabLayout, binding.container) { tab, position ->
-                tab.text = tapTitles[position]
+                tab.setIcon(tabImageView[position])
             }.attach()
     }
 }

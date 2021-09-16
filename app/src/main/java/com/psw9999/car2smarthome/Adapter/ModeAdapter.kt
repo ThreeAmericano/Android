@@ -30,14 +30,9 @@ class ModeAdapter(val context : Context) : RecyclerView.Adapter<ModeAdapter.Mode
         fun onItemClick(view:View, pos : Int)
     }
 
-    interface onListItemSelectedInterface {
-        fun onItemSelected(view:View, pos : Int)
-    }
-
 
     // 클릭 리스너 선언
     lateinit var mItemClickListener: OnItemClickListener
-    lateinit var mSelectedListener : onListItemSelectedInterface
 
     // 클릭 리스너 등록 메서드 (메인 액티비티에서 람다식 혹은 inner 클래스로 호출)
     fun setOnItemClickListener(itemClickListener : OnItemClickListener) {
@@ -70,8 +65,16 @@ class ModeAdapter(val context : Context) : RecyclerView.Adapter<ModeAdapter.Mode
         val modeButton : Button = itemView.findViewById(R.id.button_appliance)
 
         fun bind(item : mode) {
-            applianceName.text = item.modeName
-            applianceImage.setImageResource(item.image)
+            var modeName : String = item.modeName
+            applianceName.text = modeName
+            if (modeName.contains("실내모드"))
+                applianceImage.setImageResource(R.drawable.indoor)
+            else if (modeName.contains("외출모드"))
+                applianceImage.setImageResource(R.drawable.outdoor)
+            else if (modeName.contains("슬립모드"))
+                applianceImage.setImageResource(R.drawable.sleep)
+            else if (modeName.contains("에코모드"))
+                applianceImage.setImageResource(R.drawable.eco)
             val pos = adapterPosition
             Log.d("pos","$pos")
             if(pos!=RecyclerView.NO_POSITION) {
