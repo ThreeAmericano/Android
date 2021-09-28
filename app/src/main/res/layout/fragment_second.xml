@@ -40,6 +40,7 @@
         app:layout_constraintTop_toTopOf="@id/nestedScrollView"
         android:padding="16dp">
 
+
         <View
             android:id="@+id/division_Aircon"
             android:layout_width="0dp"
@@ -54,6 +55,7 @@
             android:id="@+id/imageView_Aircon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="5dp"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/aircon" />
@@ -97,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
             android:layout_marginStart="60dp"
-            android:max="100"
+            android:max="99"
             app:layout_constraintStart_toEndOf = "@id/textView_AirPower"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/division_Aircon"/>
@@ -172,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
             android:layout_marginStart="60dp"
-            android:max="100"
+            android:max="99"
             app:layout_constraintStart_toEndOf = "@id/textView_LightBrightness"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/division_Light"/>
@@ -198,12 +200,23 @@
                 >
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_white"
+                    style="@style/AlarmChipTheme"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checkable="true"
+                    android:tag="7"
+                    app:chipStrokeWidth="1dp"
+                    app:chipBackgroundColor="#FFFFFF" />
+
+                <com.google.android.material.chip.Chip
                     android:id="@+id/chip_red"
                     style="@style/AlarmChipTheme"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="0"
+                    android:tag="8"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#E30202" />
 
                 <com.google.android.material.chip.Chip
@@ -212,7 +225,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="1"
+                    android:tag="9"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#0220E3" />
 
                 <com.google.android.material.chip.Chip
@@ -221,7 +235,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="2"
+                    android:tag="10"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#19E302" />
 
                 <com.google.android.material.chip.Chip
@@ -230,7 +245,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="3"
+                    android:tag="11"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#FFEB3B" />
 
                 <com.google.android.material.chip.Chip
@@ -239,7 +255,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="4"
+                    android:tag="12"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#673AB7" />
 
                 <com.google.android.material.chip.Chip
@@ -248,7 +265,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="5"
+                    android:tag="13"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#FF5722" />
 
                 <com.google.android.material.chip.Chip
@@ -257,17 +275,9 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:checkable="true"
-                    android:tag="6"
+                    android:tag="14"
+                    app:chipStrokeWidth="1dp"
                     app:chipBackgroundColor="#03A9F4" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_white"
-                    style="@style/AlarmChipTheme"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:checkable="true"
-                    android:tag="7"
-                    app:chipBackgroundColor="#FFFFFF" />
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
@@ -288,8 +298,9 @@
             android:id="@+id/horizontalScrollView_LightMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView_LightMode">
 
@@ -301,35 +312,35 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_normal"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:tag="9"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:tag="15"
                     android:text="일반모드" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_sleep"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="10"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:tag="16"
                     android:text="슬립모드" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_guide"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="11"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:tag="17"
                     android:text="안내모드" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_tree"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="12"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:tag="18"
                     android:text="트리모드" />
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>

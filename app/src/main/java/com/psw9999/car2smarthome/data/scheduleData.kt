@@ -1,20 +1,21 @@
 package com.psw9999.car2smarthome.data
 
 data class scheduleData(
-    var Title : String? = null,
-    var UID : String? = null,
-    var repeat : Boolean? = null,
-    var modeNum : Int? = null,
-    var Active_data : String? = null,
-    var Enabled : Boolean = false,
-    var Daysofweek : List<Boolean>? = null,
-    var Start_time : String? = null,
-    var airconEnable : Boolean? = null,
-    var airconWindPower : Int? = null,
-    var lightEnable : Boolean? = null,
-    var lightBrightness : Int? = null,
-    var lightColor : Int? = null,
-    var lightMode : Int? = null,
-    var windowOpen : Boolean? = null,
-    var gasValveEnable : Boolean? = null
-)
+    var title : String? = null,
+    var repeat : Boolean = true,
+    var modeNum : Int = 0,
+    var activeDate : String? = null,
+    var enabled : Boolean = true,
+    var daysOfWeek: ArrayList<Boolean> = arrayListOf(false,false,false,false,false,false,false),
+    var startTime : String = "1200",
+    var airconEnable : Boolean = false,
+    var airconWindPower : Int = 0,
+    var lightEnable : Boolean = false,
+    var lightBrightness : Int = 0,
+    var lightColor : Int = 0,
+    var lightMode : Int = 0,
+    var windowOpen : Boolean = false,
+    var gasValveEnable : Boolean = false,
+    var name : String? = null
+) {
+}

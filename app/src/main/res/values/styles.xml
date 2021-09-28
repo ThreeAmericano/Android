@@ -22,6 +22,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="ScheduleChipTextTheme" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">13dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Widget.MyApp.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
         ...
         <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.Chip.Choice</item>

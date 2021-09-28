@@ -1,9 +1,13 @@
 package com.psw9999.car2smarthome
 
+import android.app.ProgressDialog
 import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
@@ -13,8 +17,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.psw9999.car2smarthome.AlarmFragment.Companion.alarmDatas
+import com.psw9999.car2smarthome.LoginActivity.Companion.loginFailFlag
+import com.psw9999.car2smarthome.LoginActivity.Companion.progressDialog
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.LoginActivity.Companion.signInStatus
+import com.psw9999.car2smarthome.MainActivity.Companion.guideText
 import com.psw9999.car2smarthome.ThirdFragment.Companion.scheduleDatas
 import com.psw9999.car2smarthome.data.Appliance
 import com.psw9999.car2smarthome.data.alarmData
@@ -66,16 +73,18 @@ open class MQTT_Thread : Thread() {
 class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
 
     //private var weatherInfomation : DatabaseReference = Firebase.database.reference
-    private val mainIntent = Intent(mContext, MainActivity::class.java)
+//    private val mainIntent = Intent(mContext, MainActivity::class.java)
 
     val context = mContext
-    var signInStatus : Int = 0
+
 
     init {
         sendJSONData.put("Producer", "android")
         sendJSONData.put("command", "signin")
         sendJSONData.put("UID", uid)
     }
+
+
 
 
     // 추후 사용자 이름, 날씨, 스케줄 한꺼번에 가져오도록 수정
@@ -91,13 +100,16 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         // 이름을 정상적으로 수신시 Status 값을 1 증가시킴.
         // 추후 상태값이 일정 값 이상이면 스레드를 종료시키도록 구현 예정
         signInStatus += 1
+        Log.d("signInStatus","$signInStatus")
         Log.d("Login Success","$userName")
 
         // 매개변수로 context 전달받아 intent 수행.
-        mainIntent.putExtra("userName",userName)
-        if(signInStatus == 3) {
-            context.startActivity(mainIntent)
-        }
+        //mainIntent.putExtra("userName",userName)
+        MainActivity.userName = userName
+//        if(signInStatus == 3) {
+//            progressDialog.dismiss()
+//            context.startActivity(mainIntent)
+//        }
     }
 
     // 예외 상황에 관한 try catch문 추가가 필요할듯 (ex : 통신이 끊겼을 때?)
@@ -134,14 +146,11 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                 update = it?.child("openweather")!!.child("update")!!.value.toString(),
                 humidity = it?.child("hometemp")!!.child("humi")!!.value.toString().toFloat(),
                 temperature = it?.child("hometemp")!!.child("temp")!!.value.toString().toFloat(),
-
             )
 
             // 날씨 정보 정상 취합시 1 증가시킴.
             signInStatus += 1
-            if (signInStatus == 3) {
-                context.startActivity(mainIntent)
-            }
+            Log.d("signInStatus","$signInStatus")
             Log.d("firebase weather", "${MainActivity.weather}")
         }.addOnFailureListener {
             // 파이어베이스에서 데이터 수신 실패시
@@ -153,7 +162,6 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         realtimeFirebase.child("smarthome").get().addOnSuccessListener {
             var status = it?.child("status")!!.value.toString().chunked(1)
             MainActivity.applianceStatus = ApplianceStatus(
-                //mode = it?.child("mode")!!.value.toString().toInt(),
                 mode = status[0].toInt(),
                 airconEnabled = status[1].toInt(),
                 windPower =  status[2].toInt(),
@@ -165,15 +173,28 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                 gasValveStatus = status[8].toInt(),
             )
             signInStatus += 1
-            if (signInStatus == 3) {
-                context.startActivity(mainIntent)
-            }
+            Log.d("signInStatus","$signInStatus")
+//            if (signInStatus == 3) {
+//                progressDialog.dismiss()
+//                context.startActivity(mainIntent)
+//            }
             Log.d("FB applianceStatus", "${MainActivity.applianceStatus}")
         }.addOnFailureListener {
             // 파이어베이스에서 데이터 수신 실패시
-            Log.d("firebase weather", "Error")
             Log.e("firebase", "Error getting data", it)
+            loginFailFlag = true
         }
+
+        realtimeFirebase.child("server").get().addOnSuccessListener {
+            guideText = it.child("notification").value.toString()
+            signInStatus += 1
+        }.addOnFailureListener {
+            // 파이어베이스에서 데이터 수신 실패시
+            Log.e("firebase", "Error getting data", it)
+            loginFailFlag = true
+        }
+
+
 
         // 5. 파이어베이스의 클라우드에서 모드 정보 가져오기
         firebaseDB.collection("modes")
@@ -182,7 +203,7 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                 for (document in result) {
                     Log.d("firebaseStore", "${document.id} => ${document.data}")
                     SecondFragment.modeDatas.apply {
-                        add(mode(image = document.data["image"].toString().toInt(),
+                        add(mode(
                                  modeName = document.data["modeName"].toString(),
                                  airconEnable = document.data["airconEnable"].toString().toBoolean(),
                                  airconWindPower = document.data["airconWindPower"].toString().toInt(),
@@ -196,6 +217,8 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                         ))
                     }
                 }
+                signInStatus += 1
+                Log.d("signInStatus","$signInStatus")
             }
             .addOnFailureListener { exception ->
                 Log.d("firebaseStore", "Error getting documents: ", exception)
@@ -211,24 +234,14 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
                         add(scheduleData)
                     }
                 }
+                signInStatus += 1
+                Log.d("signInStatus","$signInStatus")
             }
+
             .addOnFailureListener { exception ->
                 Log.d("firebaseStore", "Error getting documents: ", exception)
             }
 
-        // 7. 파이어베이스의 클라우드에서 알람 정보 가져오기
-        firebaseDB.collection("appliance_alarm")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    alarmDatas.apply{
-                        add(document.toObject<alarmData>())
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("firebaseStore", "Error getting documents: ", exception)
-            }
     }
 }
 

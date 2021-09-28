@@ -47,22 +47,16 @@ class AlarmAdapter(val context : Context) : RecyclerView.Adapter<AlarmAdapter.Al
             alarmContent.text = informContent
             var dateArr = item.date!!.split(".")
             alarmTime.text = dateArr[1]+"월"+dateArr[2]+"일 "+dateArr[3]+":"+dateArr[4]
-            if (informContent!!.contains("전등"))
-                alarmImage.setImageResource(R.drawable.light)
-            else if (informContent!!.contains("가스밸브"))
-                alarmImage.setImageResource(R.drawable.gasvalve)
-            else if (informContent!!.contains("창문"))
-                alarmImage.setImageResource(R.drawable.window)
-            else if (informContent!!.contains("에어컨"))
-                alarmImage.setImageResource(R.drawable.aircon)
-            else if (informContent!!.contains("실내"))
-                alarmImage.setImageResource(R.drawable.indoor)
-            else if (informContent!!.contains("외출"))
-                alarmImage.setImageResource(R.drawable.outdoor)
-            else if (informContent!!.contains("슬립"))
-                alarmImage.setImageResource(R.drawable.sleep)
-            else if (informContent!!.contains("에코"))
-                alarmImage.setImageResource(R.drawable.eco)
+            when {
+                informContent!!.contains("전등") -> alarmImage.setImageResource(R.drawable.light)
+                informContent!!.contains("가스밸브") -> alarmImage.setImageResource(R.drawable.gasvalve)
+                informContent!!.contains("창문") -> alarmImage.setImageResource(R.drawable.window)
+                informContent!!.contains("에어컨") -> alarmImage.setImageResource(R.drawable.aircon)
+                informContent!!.contains("실내") -> alarmImage.setImageResource(R.drawable.indoor)
+                informContent!!.contains("외출") -> alarmImage.setImageResource(R.drawable.outdoor)
+                informContent!!.contains("슬립") -> alarmImage.setImageResource(R.drawable.sleep)
+                informContent!!.contains("에코") -> alarmImage.setImageResource(R.drawable.eco)
+            }
         }
 
     }

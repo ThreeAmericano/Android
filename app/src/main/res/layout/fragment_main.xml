@@ -48,37 +48,36 @@
         app:layout_constraintTop_toBottomOf="@+id/modes"></View>
 
     <TextView
-        android:id="@+id/humiTextView"
+        android:id="@+id/textView_humidityValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="5dp"
         android:text="xx %"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/humiProgressBar"
-        app:layout_constraintTop_toBottomOf="@+id/tempTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_temperatureValue" />
 
     <TextView
-        android:id="@+id/tempTextView"
+        android:id="@+id/textView_temperatureValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="22dp"
-        android:text="xx 'C"
-        android:textSize="12sp"
+        android:text="xx'C"
+        android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/tempProgressBar"
-        app:layout_constraintTop_toBottomOf="@+id/loginNameText" />
+        app:layout_constraintTop_toTopOf="@+id/textView_temperature" />
 
     <ProgressBar
         android:id="@+id/humiProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="180dp"
-        android:layout_height="20dp"
+        android:layout_height="12dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="3dp"
         android:max="100"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/tempProgressBar" />
+        app:layout_constraintStart_toEndOf="@+id/textView_humidity"
+        app:layout_constraintTop_toTopOf="@+id/textView_humidityValue" />
 
 
     <View
@@ -86,9 +85,10 @@
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:background="#E4E0E0"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/humiProgressBar"></View>
@@ -101,6 +101,8 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="10dp"
         app:alignItems="stretch"
+        app:toggle_requiredAmount="0"
+        app:toggle_selectableAmount="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/division">
@@ -146,7 +148,7 @@
             tools:layout_editor_absoluteX="100dp" />
 
         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-            android:id="@+id/testMode"
+            android:id="@+id/toggleButtonSleepMode"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
@@ -166,7 +168,7 @@
             tools:layout_editor_absoluteX="200dp" />
 
         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-            android:id="@+id/test2Mode"
+            android:id="@+id/toggleButtonEcoMode"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
@@ -207,7 +209,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "5"
+            android:tag = "1"
             app:layout_flexGrow="1"
             app:toggle_icon="@drawable/aircon"
             app:toggle_iconPaddingHorizontal="5dp"
@@ -227,7 +229,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "6"
+            android:tag = "3"
             app:layout_flexGrow="1"
 
             app:toggle_icon="@drawable/light"
@@ -248,7 +250,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "7"
+            android:tag = "8"
             app:layout_flexGrow="1"
             app:toggle_icon="@drawable/gasvalve"
             app:toggle_iconPaddingHorizontal="5dp"
@@ -268,7 +270,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:tag = "8"
+            android:tag = "7"
             app:layout_flexGrow="1"
             app:toggle_icon="@drawable/window"
             app:toggle_iconPaddingHorizontal="5dp"
@@ -286,78 +288,111 @@
     </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
         android:text="습도"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/textView_humidityValue" />
 
     <TextView
-        android:id="@+id/airLevel"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView_airLevel"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        android:text="미세먼지 : XX"
-        android:textSize="12sp"
+        android:layout_marginStart="33dp"
+        android:singleLine="true"
+        android:text="미세먼지 : XXXX"
+        android:textSize="12dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weather" />
+        app:layout_constraintStart_toEndOf="@+id/textView_humidityValue"
+        app:layout_constraintTop_toTopOf="@+id/textView_humidityValue" />
 
     <TextView
-        android:id="@+id/weather"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView_weather"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:text="날씨"
-        android:textSize="12sp"
+        android:layout_marginStart="33dp"
+        android:singleLine="true"
+        android:text="조금 흐림, 22.5C"
+        android:textSize="12dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weatherView" />
+        app:layout_constraintStart_toEndOf="@+id/textView_temperatureValue"
+        app:layout_constraintTop_toTopOf="@+id/textView_temperatureValue" />
 
     <TextView
         android:id="@+id/loginNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="10dp"
         android:singleLine="true"
         android:text="XXX님 안녕하세요?"
-        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/weatherView"
+    <TextView
+        android:id="@+id/textView_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:singleLine="true"
+        android:text="오늘도 좋은하루 되세요."
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="@+id/loginNameText"
+        app:layout_constraintTop_toBottomOf="@+id/loginNameText" />
+
+
+    <ImageView
+        android:id="@+id/weatherView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/sunny"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_weather"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView_weather"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/tempProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="180dp"
-        android:layout_height="20dp"
+        android:layout_height="12dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:max="40"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/loginNameText" />
+        android:layout_marginTop="3dp"
+        android:max="35"
+        app:layout_constraintStart_toEndOf="@+id/textView_temperature"
+        app:layout_constraintTop_toTopOf="@+id/textView_temperature" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_homeInformation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        android:text="집 내부 온도/습도"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/loginNameText"
+        app:layout_constraintTop_toBottomOf="@+id/textView_guide" />
+
+
+    <TextView
+        android:id="@+id/textView_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="온도"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginNameText" />
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/loginNameText"
+        app:layout_constraintTop_toBottomOf="@+id/textView_homeInformation" />
 
     <TextView
         android:id="@+id/textView7"

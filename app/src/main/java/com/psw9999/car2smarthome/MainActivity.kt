@@ -9,7 +9,10 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.SecondFragment.Companion.modeDatas
+import com.psw9999.car2smarthome.ThirdFragment.Companion.scheduleDatas
 import com.psw9999.car2smarthome.data.Appliance
+import com.psw9999.car2smarthome.data.scheduleData
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 import com.rabbitmq.client.CancelCallback
 import com.rabbitmq.client.ConnectionFactory
@@ -24,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         lateinit var weather: Weather
         lateinit var applianceStatus: ApplianceStatus
+        lateinit var userName : String
+        lateinit var guideText : String
     }
-
-    private lateinit var userName : String
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
 
@@ -35,17 +38,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-
-        userName = intent.getStringExtra("userName")!!
-
             val fragment = MainFragment()
             fragment.arguments = Bundle().apply {
                 putString("userName","$userName")
-                putString("icon",weather.icon)
+                putString("icon",weather.icon!!.slice(listOf(0,1)))
                 putString("temp",weather.temp)
                 putString("weather", weather.description)
                 putString("airLevel", weather.air_level)
-                //putInt("mode", applianceStatus.mode)
             }
 
             val fragmentList = listOf(fragment, SecondFragment(), ThirdFragment(), AlarmFragment())
@@ -60,7 +59,16 @@ class MainActivity : AppCompatActivity() {
                 tab.setIcon(tabImageView[position])
             }.attach()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        modeDatas.removeAll(modeDatas)
+        scheduleDatas.removeAll(scheduleDatas)
+
+    }
 }
+
+
 
 // data class : 데이터 보관 목적으로 만든 클래스
 // kotlin의 data class는 생성자, getter&setter 심지어 canonical methods까지 알아서 생성해준다.

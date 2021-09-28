@@ -1,3 +1,4 @@
+
 package com.psw9999.car2smarthome
 
 import android.content.Context
@@ -28,9 +29,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SecondFragment : Fragment(){
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var Secondview: View
     private var curPos = 0
     private lateinit var modeAdapter: ModeAdapter
@@ -42,11 +40,6 @@ class SecondFragment : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
     }
 
     fun ChipGroup.setChildrenEnabled(enable:Boolean) {
@@ -86,8 +79,9 @@ class SecondFragment : Fragment(){
             modeDatas[curPos].lightBrightness = (binding.seekBarLightBrightness.progress)/10
             modeDatas[curPos].gasValveEnable = binding.switchGasValve.isChecked
             modeDatas[curPos].windowOpen = binding.switchWindow.isChecked
-            modeDatas[curPos].lightColor = binding.chipGroupColor.getChildrenTag()
-            modeDatas[curPos].lightMode = binding.chipGroupLightMode.getChildrenTag()
+            // TODO : null일 경우 default로 0 보내도록 설정
+            modeDatas[curPos].lightColor = binding.chipGroupColor.getChildrenTag()!!-7
+            modeDatas[curPos].lightMode = binding.chipGroupLightMode.getChildrenTag()!!-15
             db.collection("modes").document("${modeDatas[curPos].modeNum}"+". "+"${modeDatas[curPos].modeName}").set(modeDatas[curPos])
         }
         return binding.root
@@ -107,8 +101,8 @@ class SecondFragment : Fragment(){
                 binding.switchWindow.isChecked = modeDatas[curPos].windowOpen
                 binding.chipGroupColor.clearCheck()
                 binding.chipGroupLightMode.clearCheck()
-                Secondview.findViewWithTag<Chip>(modeDatas[curPos].lightColor.toString())?.isChecked = true
-                Secondview.findViewWithTag<Chip>(modeDatas[curPos].lightMode.toString())?.isChecked = true
+                Secondview.findViewWithTag<Chip>(modeDatas[curPos].lightColor!!.plus(7).toString())?.isChecked = true
+                Secondview.findViewWithTag<Chip>(modeDatas[curPos].lightMode!!.plus(15).toString())?.isChecked = true
             }
         })
         modeAdapter.notifyDataSetChanged()
@@ -124,33 +118,14 @@ class SecondFragment : Fragment(){
         binding.seekBarLightBrightness.progress = (modeDatas[0].lightBrightness)*10
         binding.switchGasValve.isChecked = modeDatas[0].gasValveEnable
         binding.switchWindow.isChecked = modeDatas[0].windowOpen
-        view.findViewWithTag<Chip>(modeDatas[0].lightColor.toString())?.isChecked = true
-        view.findViewWithTag<Chip>(modeDatas[0].lightMode.toString())?.isChecked = true
+        view.findViewWithTag<Chip>(modeDatas[0].lightColor!!.plus(7).toString())?.isChecked = true
+        view.findViewWithTag<Chip>(modeDatas[0].lightMode!!.plus(15).toString())?.isChecked = true
         initRecyclerView(context)
     }
 
 
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SecondFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-
         var modeDatas = mutableListOf<mode>()
-
-        fun newInstance(param1: String, param2: String) =
-            SecondFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

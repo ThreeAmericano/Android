@@ -1,8 +1,6 @@
 package com.psw9999.car2smarthome
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -10,16 +8,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import android.widget.ToggleButton
+import androidx.core.view.children
+import androidx.core.view.forEach
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.psw9999.car2smarthome.databinding.ActivityMainBinding
+import com.google.firebase.database.snapshot.Index
 import com.psw9999.car2smarthome.databinding.FragmentMainBinding
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.MainActivity.Companion.guideText
 import com.psw9999.car2smarthome.SecondFragment.Companion.modeDatas
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -43,25 +46,15 @@ class MainFragment : Fragment() {
 
     private val controlThread = ControlThread()
 
+    var applianceControlMessage  = "022255022"
+
     fun Boolean.toInt() = if (this) 1 else 0
 
-//    val modeClickListener = requireView().setOnClickListener(object : OnSingleClickListener(){
-//        override fun onSingleClick(view: View?) {
-//            var tagValue : Int = view!!.tag.toString().toInt()
-//            Log.d("indoor","${modeDatas[tagValue].modeNum}" +
-//                    "${modeDatas[tagValue].airconEnable.toInt()}" +
-//                    "${modeDatas[tagValue].airconWindPower}" +
-//                    "${modeDatas[tagValue].lightEnable.toInt()}" +
-//                    "${modeDatas[tagValue].lightBirghtness}" +
-//                    "${modeDatas[tagValue].lightColor}" +
-//                    "${modeDatas[tagValue].lightMode}" +
-//                    "${modeDatas[tagValue].gasValveEnable.toInt()}" +
-//                    "${modeDatas[tagValue].windowOpen.toInt()}"
-//            )
-//        }
-//    })
+    fun Boolean.onAndOFF() = if(this) "OFF" else "ON"
 
-    val modeClickListener = object : OnSingleClickListener() {
+    fun Boolean.sendMessage() = if(this) 0 else 1
+
+    private val modeClickListener = object : OnSingleClickListener() {
         override fun onSingleClick(view: View?) {
             var tagValue : Int = view!!.tag.toString().toInt()-1
             var SendMessage : String = "${modeDatas[tagValue].modeNum}" +
@@ -78,9 +71,51 @@ class MainFragment : Fragment() {
         }
     }
 
+    private val applianceClickListener = object : OnSingleClickListener() {
+        override fun onSingleClick(view: View?) {
+            //var tagValue : Int = view!!.tag.toString().toInt()-1
+            var tempString = ""
+            var post = applianceControlMessage.chunked(1).toMutableList()
+            post[view!!.tag.toString().toInt()] = view.isSelected.sendMessage().toString()
+
+            post.forEach {
+                tempString += it
+            }
+
+            controlThread.sendMQTT(tempString)
+            Log.d("Send",tempString)
+            binding.modes.childrenAllOff()
+        }
+    }
+
+    fun ThemedToggleButtonGroup.childrenAllOff(){
+        children.forEach {
+            if(it.isSelected){
+                binding.root.findViewById<ThemedToggleButtonGroup>(this.id).selectButton(it.id)
+            }
+        }
+    }
 
     // 리스너 선언 및 초기화
-    val mValueEventListener = object : ValueEventListener {
+    val eventListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            guideText = dataSnapshot.value.toString()
+
+            if(guideText != "none") {
+                binding.textViewGuide.text = guideText
+            }else{
+                binding.textViewGuide.text = "오늘도 좋은하루 되세요!"
+            }
+
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            Log.w("TAG", "loadPost:onCancelled", databaseError.toException())
+        }
+    }
+
+    // 리스너 선언 및 초기화
+    val applianceListner = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val post = dataSnapshot.child("status").value.toString().chunked(1)
             MainActivity.applianceStatus.mode = post[0].toInt()
@@ -97,11 +132,11 @@ class MainFragment : Fragment() {
             activity?.runOnUiThread {
                 // 추후 status 변수를 만들어 해당 값과 비교하여 ui 변경하도록 수정 필요b
                 when(MainActivity.applianceStatus.mode) {
-                    1 -> binding.modes.selectButton(R.id.inputMode)
-                    2 -> binding.modes.selectButton(R.id.outGoingMode)
-                    3 -> binding.modes.selectButton(R.id.testMode)
-                    4 -> binding.modes.selectButton(R.id.test2Mode)
-                    //else -> binding.modes.selectButton()
+                    1 -> {  if(!binding.inputMode.isSelected) binding.modes.selectButton(R.id.inputMode) }
+                    2 -> {  if(!binding.outGoingMode.isSelected) binding.modes.selectButton(R.id.outGoingMode) }
+                    3 -> {  if(!binding.toggleButtonSleepMode.isSelected) binding.modes.selectButton(R.id.toggleButtonSleepMode) }
+                    4 -> { if(!binding.toggleButtonEcoMode.isSelected) binding.modes.selectButton(R.id.toggleButtonEcoMode) }
+                    else -> binding.modes.childrenAllOff()
                 }
                 if(MainActivity.applianceStatus.airconEnabled == 1) {
                     if(!binding.aircon.isSelected) {
@@ -164,7 +199,10 @@ class MainFragment : Fragment() {
             Log.d("onCreate","userName = $userName, icon = $icon, weather = $weather")
         }
         // 리스너에 이벤트를 포함시킴.
-        realtimeFirebase.child("smarthome").addValueEventListener(mValueEventListener)
+
+
+        realtimeFirebase.child("smarthome").addValueEventListener(applianceListner)
+        realtimeFirebase.child("server").child("notification").addValueEventListener(eventListener)
 
     }
 
@@ -185,29 +223,21 @@ class MainFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        binding.inputMode.setOnClickListener(modeClickListener)
-        binding.outGoingMode.setOnClickListener(modeClickListener)
-        binding.testMode.setOnClickListener(modeClickListener)
-        binding.test2Mode.setOnClickListener(modeClickListener)
+//        binding.appliances.children.forEachIndexed { index, appliance ->
+//            hashMap[appliance.tag.toString()] = index
+//        }
 
-        binding.gasvalve.setOnClickListener(object : OnSingleClickListener(){
-            override fun onSingleClick(v: View?) {
-                if(!binding.gasvalve.isSelected) {
-                    Toast.makeText(
-                        activity, "가스밸브 ON",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    controlThread.sendMQTT("022222221")
-                }
-                else {
-                    Toast.makeText(
-                        activity, "가스밸브 OFF",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    controlThread.sendMQTT("022222220")
-                }
-            }
-        })
+        with(binding) {
+            inputMode.setOnClickListener(modeClickListener)
+            outGoingMode.setOnClickListener(modeClickListener)
+            toggleButtonSleepMode.setOnClickListener(modeClickListener)
+            toggleButtonEcoMode.setOnClickListener(modeClickListener)
+
+            gasvalve.setOnClickListener(applianceClickListener)
+            aircon.setOnClickListener(applianceClickListener)
+            light.setOnClickListener(applianceClickListener)
+            window.setOnClickListener(applianceClickListener)
+        }
         return binding.root
     }
 
@@ -217,73 +247,70 @@ class MainFragment : Fragment() {
                 binding.loginNameText.text = "${userName}님 안녕하세요?"
             }
 
-            arguments?.takeIf { it.containsKey("icon") }?.apply {
+            arguments?.takeIf { it.containsKey("icon") and it.containsKey("temp")}?.apply {
                 when (icon) {
-                    "01d" -> binding.weatherView.setImageResource(R.drawable.sunny)
-                    "02d" -> binding.weatherView.setImageResource(R.drawable.littlecloudy)
-                    "03d" -> binding.weatherView.setImageResource(R.drawable.cloudy)
-                    "04d" -> binding.weatherView.setImageResource(R.drawable.darkcloudy)
-                    "09d" -> binding.weatherView.setImageResource(R.drawable.rain)
-                    "10d" -> binding.weatherView.setImageResource(R.drawable.rainsunny)
-                    "11d" -> binding.weatherView.setImageResource(R.drawable.thunder)
-                    "13d" -> binding.weatherView.setImageResource(R.drawable.snow)
-                    "50d" -> binding.weatherView.setImageResource(R.drawable.fog)
-                    else -> binding.weatherView.setImageResource(R.drawable.fog)
+                    "01" -> {binding.weatherView.setImageResource(R.drawable.sunny)
+                             binding.textViewWeather.text = "날씨 : 맑음, $temperature°C"}
+                    "02" -> {binding.weatherView.setImageResource(R.drawable.littlecloudy)
+                             binding.textViewWeather.text = "날씨 : 구름 조금, $temperature°C"}
+                    "03" -> {binding.weatherView.setImageResource(R.drawable.cloudy)
+                             binding.textViewWeather.text = "날씨 : 구름 많음, $temperature°C"}
+                    "04" -> {binding.weatherView.setImageResource(R.drawable.darkcloudy)
+                             binding.textViewWeather.text = "날씨 : 흐림, $temperature°C"}
+                    "09" -> {binding.weatherView.setImageResource(R.drawable.rain)
+                             binding.textViewWeather.text = "날씨 : 비, $temperature°C"}
+                    "10" -> {binding.weatherView.setImageResource(R.drawable.rainsunny)
+                             binding.textViewWeather.text = "날씨 : 비 온후 갬, $temperature°C"}
+                    "11" -> {binding.weatherView.setImageResource(R.drawable.thunder)
+                             binding.textViewWeather.text = "날씨 : 뇌우, $temperature°C"}
+                    "13" -> {binding.weatherView.setImageResource(R.drawable.snow)
+                             binding.textViewWeather.text = "날씨 : 눈, $temperature°C"}
+                    "50" -> {binding.weatherView.setImageResource(R.drawable.fog)
+                             binding.textViewWeather.text = "날씨 : 안개, $temperature°C"}
+                    else -> {binding.weatherView.setImageResource(R.drawable.sunny)
+                             binding.textViewWeather.text = "날씨 : 맑음, $temperature°C"}
                 }
             }
-            arguments?.takeIf { it.containsKey("weather") }?.apply {
-                binding.weather.text = "날씨 : $weather, $temperature°C"
-            }
-
-//            arguments?.takeIf { it.containsKey("temp") }?.apply {
-//                binding.temperature.text = "$temperature°C"
-//            }
 
             arguments?.takeIf { it.containsKey("airLevel") }?.apply {
                 when (airLevel) {
-                    "1" -> binding.airLevel.text = "미세먼지 : 매우좋음"
-                    "2" -> binding.airLevel.text = "미세먼지 : 좋음"
-                    "3" -> binding.airLevel.text = "미세먼지 : 보통"
-                    "4" -> binding.airLevel.text = "미세먼지 : 나쁨"
-                    "5" -> binding.airLevel.text = "미세먼지 : 매우 나쁨"
+                    "1" -> binding.textViewAirLevel.text = "미세먼지 : 매우좋음"
+                    "2" -> binding.textViewAirLevel.text = "미세먼지 : 좋음"
+                    "3" -> binding.textViewAirLevel.text = "미세먼지 : 보통"
+                    "4" -> binding.textViewAirLevel.text = "미세먼지 : 나쁨"
+                    "5" -> binding.textViewAirLevel.text = "미세먼지 : 매우 나쁨"
                 }
             }
 
             if(MainActivity.applianceStatus.airconEnabled != 0) {
-                //binding.airconToggle.isChecked = true
                 binding.appliances.selectButton(R.id.aircon)
             }
             if(MainActivity.applianceStatus.lightEnabled != 0) {
-                //binding.lightToggle.isChecked = true
                 binding.appliances.selectButton(R.id.light)
             }
             if(MainActivity.applianceStatus.windowStatus != 0) {
-                //binding.windowToggle.isChecked = true
                 binding.appliances.selectButton(R.id.window)
             }
             if(MainActivity.applianceStatus.gasValveStatus != 0) {
-                //binding.gasToggle.isChecked = true
                 binding.appliances.selectButton(R.id.gasvalve)
             }
 
             binding.humiProgressBar.progress = MainActivity.weather.humidity.toInt()
-            binding.humiTextView.text = "${MainActivity.weather.humidity}%"
+            binding.textViewHumidityValue.text = "${MainActivity.weather.humidity} %"
 
             binding.tempProgressBar.progress = MainActivity.weather.temperature.toInt()
-            binding.tempTextView.text = "${MainActivity.weather.temperature}°C"
+            binding.textViewTemperatureValue.text = "${MainActivity.weather.temperature}°C"
+
+            if(guideText != "none") {
+                binding.textViewGuide.text = guideText
+            }else{
+                binding.textViewGuide.text = "오늘도 좋은하루 되세요!"
+            }
 
         }
 
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragment.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1 : String) =

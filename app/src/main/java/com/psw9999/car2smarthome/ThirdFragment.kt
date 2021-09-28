@@ -25,18 +25,10 @@ private lateinit var binding: FragmentThirdBinding
  * create an instance of this fragment.
  */
 class ThirdFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     lateinit var scheduleIntent : Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -47,8 +39,16 @@ class ThirdFragment : Fragment() {
         binding = FragmentThirdBinding.inflate(inflater, container, false)
         val context : Context = requireContext()
         scheduleIntent = Intent(context, ScheduleActivity::class.java)
+        binding.floatingActionButtonScheduleAdd.setOnClickListener {
+            scheduleIntent.putExtra("curPos",-1)
+            startActivity(scheduleIntent)
+        }
         initRecyclerView(context)
         return binding.root
+    }
+
+    fun refreshAdapter(position : Int) {
+        schedulesAdapter.notifyItemChanged(position)
     }
 
     private fun initRecyclerView(context : Context) {
@@ -56,6 +56,7 @@ class ThirdFragment : Fragment() {
         schedulesAdapter.schedules = scheduleDatas
         schedulesAdapter.setOnScheduleClickListener(object : SchedulesAdapter.OnScheduleItemClickListener {
             override fun onItemClick(view: View, pos: Int) {
+                scheduleIntent.putExtra("curPos",pos)
                 startActivity(scheduleIntent)
             }
         })
@@ -65,14 +66,5 @@ class ThirdFragment : Fragment() {
 
     companion object {
         var scheduleDatas = mutableListOf<scheduleData>()
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ThirdFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

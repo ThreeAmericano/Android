@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="160dp">
 
+
     <View
         android:id="@+id/view_divider"
         android:layout_width="0dp"
@@ -27,9 +28,20 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:shapeAppearance="@style/HabitListTheme"
         app:strokeWidth="1dp" />
+
+    <TextView
+        android:id="@+id/textView_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="작성자 : 박승운"
+        android:textColor="#000000"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
+        app:layout_constraintStart_toStartOf="@+id/button_schedule" />
 
     <TextView
         android:id="@+id/textView_scheduleName"
@@ -57,15 +69,15 @@
 
     <TextView
         android:id="@+id/textView_oneTime"
-        app:layout_constraintTop_toTopOf="@+id/button_schedule"
-        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
-        app:layout_constraintEnd_toStartOf="@+id/switch_scheduleEnable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="10dp"
         android:text="X월 X일"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@id/button_schedule"
+        app:layout_constraintEnd_toStartOf="@+id/switch_scheduleEnable"
+        app:layout_constraintTop_toTopOf="@+id/button_schedule" />
 
     <TextView
         android:id="@+id/textView_Sun"

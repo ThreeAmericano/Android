@@ -1,6 +1,7 @@
 package com.psw9999.car2smarthome.Adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,12 +41,18 @@ class SchedulesAdapter(val context: Context) : RecyclerView.Adapter<SchedulesAda
         holder.bind(schedules[position])
     }
 
+    fun itemUpdate(position : Int) {
+        notifyItemChanged(position)
+    }
+
     // 전체 데이터의 개수를 리턴
     override fun getItemCount(): Int {
         return schedules.size
     }
 
     inner class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view){
+
+        val writerName : TextView = itemView.findViewById(R.id.textView_name)
         val scheduleName : TextView = itemView.findViewById(R.id.textView_scheduleName)
         val scheduleTime : TextView = itemView.findViewById(R.id.textView_time)
         val scheduleButton : Button = itemView.findViewById(R.id.button_schedule)
@@ -53,14 +60,15 @@ class SchedulesAdapter(val context: Context) : RecyclerView.Adapter<SchedulesAda
         val switch_scheduleEnable : Switch = itemView.findViewById(R.id.switch_scheduleEnable)
 
         fun bind(item:scheduleData) {
-            scheduleName.text = item.Title
-            var startTime: Int = item.Start_time!!.toInt()
+            scheduleName.text = item.title
+            writerName.text = "작성자 : " + item.name
+            var startTime: Int = item.startTime!!.toInt()
             if (startTime < 1200) {
                 if (startTime < 100)
                     scheduleTime.text =
-                        "오전 " + 12 + "시 " + item.Start_time?.slice(listOf(2, 3)) + "분"
+                        "오전 " + 12 + "시 " + item.startTime?.slice(listOf(2, 3)) + "분"
                 else
-                    scheduleTime.text = "오전 " + (startTime / 100) + "시 " + item.Start_time?.slice(
+                    scheduleTime.text = "오전 " + (startTime / 100) + "시 " + item.startTime?.slice(
                         listOf(
                             2,
                             3
@@ -69,10 +77,10 @@ class SchedulesAdapter(val context: Context) : RecyclerView.Adapter<SchedulesAda
             } else {
                 if (startTime < 1300)
                     scheduleTime.text =
-                        "오후 " + 12 + "시 " + item.Start_time?.slice(listOf(2, 3)) + "분"
+                        "오후 " + 12 + "시 " + item.startTime?.slice(listOf(2, 3)) + "분"
                 else
                     scheduleTime.text =
-                        "오후 " + ((startTime - 1200) / 100) + "시 " + item.Start_time?.slice(
+                        "오후 " + ((startTime - 1200) / 100) + "시 " + item.startTime?.slice(
                             listOf(
                                 2,
                                 3
@@ -80,16 +88,23 @@ class SchedulesAdapter(val context: Context) : RecyclerView.Adapter<SchedulesAda
                         ) + "분"
             }
 
-            for (i in 0..6) {
-                if (item.Daysofweek?.get(i) == true) {
-                    itemView.findViewWithTag<TextView>(i.toString()).visibility = View.VISIBLE
-                } else {
+            switch_scheduleEnable.isChecked = item.enabled
+            if (item.repeat) {
+                oneTime.text = ""
+                for (i in 0..6) {
+                    if (item.daysOfWeek?.get(i)) {
+                        itemView.findViewWithTag<TextView>(i.toString()).visibility = View.VISIBLE
+                    } else {
+                        itemView.findViewWithTag<TextView>(i.toString()).visibility = View.GONE
+                    }
+                }
+            }else{
+                var date = item.activeDate!!.split(".")
+                Log.d("date","$date")
+                oneTime.text = date[1] + "월 " + date[2] + "일"
+                for (i in 0..6) {
                     itemView.findViewWithTag<TextView>(i.toString()).visibility = View.GONE
                 }
-            }
-            switch_scheduleEnable.isChecked = item.Enabled
-            if (item.repeat == true) {
-                oneTime.text = ""
             }
 
             val pos = adapterPosition

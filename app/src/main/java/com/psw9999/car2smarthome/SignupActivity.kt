@@ -39,24 +39,8 @@ class SignupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_signup)
+
         setContentView(binding.root)
-
-        //auth = Firebase.auth
-
-//        binding.NameInput.addTextChangedListener {
-//            SignupName = it.toString()
-//        }
-//        binding.SingupIDInput.addTextChangedListener {
-//            SignupID = it.toString()
-//        }
-//        binding.SignupPasswordInput.addTextChangedListener {
-//            SignupPW = it.toString()
-//        }
-//        binding.SignupPasswordCheckInput.addTextChangedListener {
-//            SignupCheckPW = it.toString()
-//        }
-
 
         // 등록버튼 눌렀을 시 -> 파이어베이스에 ID, PW를 저장한다.
         binding.RegisterButton.setOnClickListener {
@@ -85,9 +69,6 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
-
-        //auth = Firebase.auth
-
     }
 
     private fun createAccount(email: String, password: String) {

@@ -10,6 +10,5 @@ data class mode(
     var lightMode : Int?,
     var windowOpen : Boolean,
     var gasValveEnable : Boolean,
-    var image : Int,
     var modeNum : Int
 )

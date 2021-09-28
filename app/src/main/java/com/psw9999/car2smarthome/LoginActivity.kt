@@ -1,5 +1,6 @@
 package com.psw9999.car2smarthome
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -43,30 +44,27 @@ class LoginActivity : AppCompatActivity() {
         lateinit var auth: FirebaseAuth
         // RealtimeFirebase 정보를 가져와 저장할 객체
         val realtimeFirebase : DatabaseReference by lazy { Firebase.database.reference }
+
+        var signInStatus : Int = 0
+
+        lateinit var progressDialog : ProgressDialog
+
+        var loginFailFlag : Boolean? = false
     }
 
     init {
         // 1. 로그인 작업의 onCreate 메서드에서 FirebaseAuth 객체의 공유 인스턴스로 가져온다.
         // [START declare_auth]
         auth = Firebase.auth
+
     }
 
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+    val mainIntent by lazy {Intent(this, MainActivity::class.java)}
 
     private lateinit var ID_value: String
     private lateinit var PW_value: String
 
-    private val controlThread = ControlThread()
-
-    // [START declare_auth]
-    //private lateinit var auth: FirebaseAuth
-
-
-
-    val mainIntent by lazy {Intent(this, MainActivity::class.java)}
-    //val mainIntent by lazy {Intent(baseContext, MainActivity::class.java)}
-
-    // [END declare_auth]
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,7 +75,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         val intent = Intent(this, SignupActivity::class.java)
 
-        // binding.SignupText.setText(spannable, TextView.BufferType.SPANNABLE)
         val clickSpan = object : ClickableSpan() {
             override fun onClick(p0: View) {
                 Toast.makeText(
@@ -104,24 +101,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // 버튼을 여러번 누르면 로그인 요청을 여러번하는 현상이 있어 중복클릭방지 리스너 사용
-//        binding.LoginButton.setOnClickListener {
-//
-//            ID_value = binding.IDInput.text.toString()
-//            PW_value = binding.PasswordInput.text.toString()
-//
-//             //EditText null 값 입력방지
-//            if(ID_value.isEmpty() or PW_value.isEmpty()){
-//                Toast.makeText(
-//                    baseContext, "ID 혹은 PW 값을 입력해주세요!",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//
-//            else {
-//                signIn(ID_value, PW_value)
-//            }
-//        }
 
         binding.LoginButton.setOnClickListener(object : OnSingleClickListener() {
             override fun onSingleClick(v: View?) {
@@ -159,17 +138,45 @@ class LoginActivity : AppCompatActivity() {
         }
 
         private fun signIn(email: String, password: String) {
+
+            progressDialog = ProgressDialog(this)
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+//            progressDialog.setMessage("로그인 중입니다.")
+//            progressDialog.setCancelable(false)
+            with(progressDialog) {
+                setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                setMessage("로그인 중입니다...")
+                setCancelable(false)
+                show()
+            }
+
+            Thread {
+                try {
+                    while(signInStatus < 6) {
+                        // 0.1초 마다 체크
+                        if(loginFailFlag == true)
+                        {
+                            loginFailFlag = false
+                            progressDialog.dismiss()
+                            return@Thread
+                        }
+                        Thread.sleep(100)
+                    }
+                    Log.d("progressDialog","success")
+                    signInStatus = 0
+                    progressDialog.dismiss()
+                    startActivity(mainIntent)
+                }catch (e:Exception) {
+                    e.printStackTrace()
+                }
+            }.start()
+
             // [START sign_in_with_email]
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        Log.d("Login", "$user:success")
-                        Toast.makeText(
-                            baseContext, "로그인 성공!",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         binding.IDInput.text = null
                         binding.PasswordInput.text = null
 
@@ -179,11 +186,9 @@ class LoginActivity : AppCompatActivity() {
                         signInThread.start()
 
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.d("debug", "fail")
-                        //Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        loginFailFlag = true
                         Toast.makeText(
-                            baseContext, "로그인 실패",
+                            baseContext, "로그인실패, ID나 Password를 확인해주세요.",
                             Toast.LENGTH_SHORT
                         ).show()
                         //updateUI(null)
