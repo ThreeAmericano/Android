@@ -2,23 +2,12 @@ package com.psw9999.car2smarthome
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.Sampler
-import android.util.Log
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
+import com.psw9999.car2smarthome.Adapter.FragmentAdapter
 import com.psw9999.car2smarthome.SecondFragment.Companion.modeDatas
 import com.psw9999.car2smarthome.ThirdFragment.Companion.scheduleDatas
-import com.psw9999.car2smarthome.data.Appliance
-import com.psw9999.car2smarthome.data.scheduleData
 import com.psw9999.car2smarthome.databinding.ActivityMainBinding
-import com.rabbitmq.client.CancelCallback
-import com.rabbitmq.client.ConnectionFactory
-import com.rabbitmq.client.DeliverCallback
-import org.json.JSONObject
-import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
