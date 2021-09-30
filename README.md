@@ -37,7 +37,7 @@
   반복 스위치를 OFF시 단발성으로 실행하여 원하는 날짜를 입력하여 실행이 가능하다.  
 5-4. 모드 제어 스위츠를 ON하면 모드를 불러와 원하는 모드를 실행시킬 수 있다. OFF시 개별 가전을 하나씩 설정하여 수행할 수 있다.
 
-## 6. Alarm Activity
+## 6. Alarm Fragment
 ![image](https://user-images.githubusercontent.com/29484377/135446053-6aa21057-c370-467d-9c6f-5dbee966e877.png)     
 6-1. 가전이나 모드가 실행된 이력을 확인할 수 있는 Alarm Activity  
 6-2. 집에서 직접, 혹은 다른 기기에서 실행하였거나 스케줄에서 실행된 이력을 확인할 수 있다.  
