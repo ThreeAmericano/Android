@@ -20,8 +20,6 @@ import kotlin.concurrent.thread
 
 
 class SignupActivity : AppCompatActivity() {
-    //private lateinit var auth : FirebaseAuth
-
     private lateinit var SignupName : String
     private lateinit var SignupID : String
     private lateinit var SignupPW : String
@@ -72,19 +70,15 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun createAccount(email: String, password: String) {
+        val signUpAuth : FirebaseAuth = Firebase.auth
         // [START create_user_with_email]
-        LoginActivity.auth.createUserWithEmailAndPassword(email, password)
+        signUpAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 // 가입 성공시
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("TEST", "createUserWithEmail:success")
-                    val user = LoginActivity.auth.currentUser
-                    // 해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
-                    user?.let {
-                        var uid : String = user.uid
-                    }
-
+                    val user = signUpAuth.currentUser
                     thread(start = true){
                         try {
                             jobj.put("Producer", "android")
@@ -99,7 +93,6 @@ class SignupActivity : AppCompatActivity() {
                             val connection = factory.newConnection()
                             val channel = connection.createChannel()
 
-                            //channel.queueDeclare("webos.topic",false,false,false,null)
                             channel.basicPublish(
                                 "webos.topic",
                                 "webos.server.info",
@@ -119,19 +112,14 @@ class SignupActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-                    // 회원가입 성공시 로그인 창으로 돌아감.
-                    val loginIntent = Intent(this, LoginActivity::class.java)
-                    startActivity(loginIntent)
-                    Toast.makeText(baseContext, "회원가입 성공",
+                    Toast.makeText(this, "회원가입 성공",
                        Toast.LENGTH_SHORT).show()
-                    //updateUI(user)
+                    finish()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("TEST", "createUserWithEmail:failure", task.exception)
                     Toast.makeText(baseContext, "회원가입 실패",
                         Toast.LENGTH_SHORT).show()
-                    //updateUI(null)
                 }
             }
         // [END create_user_with_email]

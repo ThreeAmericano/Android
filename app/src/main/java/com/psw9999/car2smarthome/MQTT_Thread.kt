@@ -18,7 +18,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.LoginActivity.Companion.loginFailFlag
-import com.psw9999.car2smarthome.LoginActivity.Companion.progressDialog
 import com.psw9999.car2smarthome.LoginActivity.Companion.realtimeFirebase
 import com.psw9999.car2smarthome.LoginActivity.Companion.signInStatus
 import com.psw9999.car2smarthome.MainActivity.Companion.guideText
@@ -77,8 +76,6 @@ class SigninThread(uid : String) : MQTT_Thread() {
         channel.close()
         connection.close()
 
-        // 이름을 정상적으로 수신시 Status 값을 1 증가시킴.
-        // 추후 상태값이 일정 값 이상이면 스레드를 종료시키도록 구현 예정
         signInStatus += 1
         Log.d("signInStatus","$signInStatus")
         Log.d("Login Success","$userName")
@@ -90,7 +87,6 @@ class SigninThread(uid : String) : MQTT_Thread() {
 
     // 예외 상황에 관한 try catch문 추가가 필요할듯 (ex : 통신이 끊겼을 때?)
     override fun run() {
-
         // 1. uid를 MQTT서버로 송신한다.
         // exchange
         // routing key
@@ -220,7 +216,6 @@ class SigninThread(uid : String) : MQTT_Thread() {
 
 
 class ControlThread : MQTT_Thread() {
-
     fun sendMQTT(message : String) {
         thread(true) {
             channel.basicPublish(

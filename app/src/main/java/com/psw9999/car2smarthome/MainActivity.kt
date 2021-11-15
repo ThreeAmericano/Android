@@ -12,7 +12,6 @@ import com.psw9999.car2smarthome.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    // 전역 변수 생성
     companion object {
         lateinit var weather: Weather
         lateinit var applianceStatus: ApplianceStatus
@@ -21,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

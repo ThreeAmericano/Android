@@ -49,7 +49,7 @@ class AlarmAdapter(val context : Context) : RecyclerView.Adapter<AlarmAdapter.Al
             alarmTime.text = dateArr[1]+"월"+dateArr[2]+"일 "+dateArr[3]+":"+dateArr[4]
             when {
                 informContent!!.contains("전등") -> alarmImage.setImageResource(R.drawable.light)
-                informContent!!.contains("가스밸브") -> alarmImage.setImageResource(R.drawable.gasvalve)
+                informContent.contains("가스밸브") -> alarmImage.setImageResource(R.drawable.gasvalve)
                 informContent!!.contains("창문") -> alarmImage.setImageResource(R.drawable.window)
                 informContent!!.contains("에어컨") -> alarmImage.setImageResource(R.drawable.aircon)
                 informContent!!.contains("실내") -> alarmImage.setImageResource(R.drawable.indoor)
