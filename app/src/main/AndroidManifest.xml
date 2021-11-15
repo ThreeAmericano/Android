@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.psw9999.car2smarthome">
-
     <!-- 파이어베이스 접근을 위한 인터넷 권한 허용 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,7 +11,8 @@
         android:roundIcon="@mipmap/ic_smarthome_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Car2Smarthome">
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".ApplianceActivity"></activity>
+        <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"> </activity>
-        <activity android:name=".ScheduleActivity"> </activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ScheduleActivity"></activity>
     </application>
 
 </manifest>

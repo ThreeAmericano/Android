@@ -25,7 +25,7 @@
         app:srcCompat="@drawable/smarthome2" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/IDInput"
+        android:id="@+id/editText_ID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -36,7 +36,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/PasswordInput"
+        android:id="@+id/editText_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

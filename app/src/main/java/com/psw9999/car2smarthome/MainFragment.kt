@@ -1,6 +1,7 @@
 package com.psw9999.car2smarthome
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -43,13 +44,13 @@ class MainFragment : Fragment() {
     private var airLevel : String? = null
 
     lateinit var binding: FragmentMainBinding
+    val ApplianceIntent by lazy { Intent(requireContext(), ApplianceActivity::class.java) }
 
     private val controlThread = ControlThread()
 
     var applianceControlMessage  = "022255022"
 
     fun Boolean.toInt() = if (this) 1 else 0
-
     fun Boolean.onAndOFF() = if(this) "OFF" else "ON"
 
     fun Boolean.sendMessage() = if(this) 0 else 1
@@ -199,10 +200,9 @@ class MainFragment : Fragment() {
             Log.d("onCreate","userName = $userName, icon = $icon, weather = $weather")
         }
         // 리스너에 이벤트를 포함시킴.
-
-
         realtimeFirebase.child("smarthome").addValueEventListener(applianceListner)
         realtimeFirebase.child("server").child("notification").addValueEventListener(eventListener)
+
 
     }
 
@@ -237,6 +237,10 @@ class MainFragment : Fragment() {
             aircon.setOnClickListener(applianceClickListener)
             light.setOnClickListener(applianceClickListener)
             window.setOnClickListener(applianceClickListener)
+        }
+
+        binding.textViewApplianceControl.setOnClickListener {
+            startActivity(ApplianceIntent)
         }
         return binding.root
     }

@@ -39,16 +39,11 @@ import kotlin.concurrent.thread
 class LoginActivity : AppCompatActivity() {
 
     companion object  {
-        // 객체로 선언할지 변수로 선언할지 고민..
-        // 다른 액티비티에서 객체 생성마다 firebase와 연결시도?
         lateinit var auth: FirebaseAuth
         // RealtimeFirebase 정보를 가져와 저장할 객체
         val realtimeFirebase : DatabaseReference by lazy { Firebase.database.reference }
-
         var signInStatus : Int = 0
-
         lateinit var progressDialog : ProgressDialog
-
         var loginFailFlag : Boolean? = false
     }
 
@@ -61,9 +56,6 @@ class LoginActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
     val mainIntent by lazy {Intent(this, MainActivity::class.java)}
-
-    private lateinit var ID_value: String
-    private lateinit var PW_value: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,28 +96,24 @@ class LoginActivity : AppCompatActivity() {
 
         binding.LoginButton.setOnClickListener(object : OnSingleClickListener() {
             override fun onSingleClick(v: View?) {
-                ID_value = binding.IDInput.text.toString()
-                PW_value = binding.PasswordInput.text.toString()
+                val ID_Input = binding.editTextID.text.toString()
+                val PW_Input = binding.editTextPassword.text.toString()
 
-                 //EditText null 값 입력방지
-                if(ID_value.isEmpty() or PW_value.isEmpty()){
+                // editText는 비어있는 경우에 null 값이 아니므로 Empty 등의 방법을 활용하여 값을 체크할 것
+                if (ID_Input.isEmpty() or PW_Input.isEmpty()) {
                     Toast.makeText(
-                        baseContext, "ID 혹은 PW 값을 입력해주세요!",
-                        Toast.LENGTH_SHORT
+                        baseContext, "아이디 혹은 비밀번호를 입력해주세요.",
+                        Toast.LENGTH_LONG
                     ).show()
+                }else{
+                    signIn(ID_Input, PW_Input)
                 }
-
-                else {
-                    signIn(ID_value, PW_value)
-                }
-                }
+            }
         })
-
 
         binding.testButton.setOnClickListener {
             signIn("psw1234@naver.com", "123412")
         }
-
     }
 
         public override fun onStart() {
@@ -138,11 +126,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         private fun signIn(email: String, password: String) {
-
             progressDialog = ProgressDialog(this)
-//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-//            progressDialog.setMessage("로그인 중입니다.")
-//            progressDialog.setCancelable(false)
+
             with(progressDialog) {
                 setProgressStyle(ProgressDialog.STYLE_SPINNER)
                 setMessage("로그인 중입니다...")
@@ -177,12 +162,11 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        binding.IDInput.text = null
-                        binding.PasswordInput.text = null
+                        binding.editTextID.text = null
+                        binding.editTextPassword.text = null
 
-                        // firebase에서
-                        // 여기서 전달하는 this는 어떤 것?
-                        val signInThread = SigninThread(user!!.uid, this)
+
+                        val signInThread = SigninThread(user!!.uid)
                         signInThread.start()
 
                     } else {

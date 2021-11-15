@@ -35,7 +35,6 @@ import java.util.*
 import kotlin.concurrent.thread
 import kotlin.concurrent.timer
 
-// 코틀린은 open 키워드가 없는 경우 다른 곳에서 상속 받지 못하는 final class로 정의됨.
 open class MQTT_Thread : Thread() {
     protected val sendJSONData  = org.json.JSONObject()
     private val factory = ConnectionFactory()
@@ -43,7 +42,6 @@ open class MQTT_Thread : Thread() {
     protected lateinit var message : String
     protected val firebaseDB = Firebase.firestore
 
-    // 초기화 영역, 코틀린은 별도의 생성자 영역이 없기 때문에 init 영역에서 초기화를 해주어야 한다.
     init{
         // Connection 정보 생성
         factory.host = "211.179.42.130"
@@ -56,38 +54,20 @@ open class MQTT_Thread : Thread() {
     // 미리 연결시키는 것이 아닌 객체 생성시 그 때부터 연결 시작
     protected val connection by lazy { factory.newConnection()!! }
     // Channel : connection 내부에 정의된 가상의 연결, queue에서 데이터를 손볼 때 생기는 일종의 통로 같은 개념
-    // !! : 변수가 null이라면 null을 출력하는 것이 아니라 오류를 발생하여 프로그래머에게 알려준다.
-    // 변수가 null일 시 KotlinNullPointerException 오류(예외)를 발생시킴.
     protected val channel by lazy { connection.createChannel()!! }
 
     protected val cancelCallback = CancelCallback { consumerTag : String? ->
-        // 매개변수 context 문제로 인해 오류 발생함.
-//        Toast.makeText(
-//            activity, "ID 혹은 PW 값을 입력해주세요!",
-//            Toast.LENGTH_SHORT
-//        ).show()
         Log.d("Consume", "$consumerTag was canceled" )
     }
 }
 
-class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
-
-    //private var weatherInfomation : DatabaseReference = Firebase.database.reference
-//    private val mainIntent = Intent(mContext, MainActivity::class.java)
-
-    val context = mContext
-
-
+class SigninThread(uid : String) : MQTT_Thread() {
     init {
         sendJSONData.put("Producer", "android")
         sendJSONData.put("command", "signin")
         sendJSONData.put("UID", uid)
     }
 
-
-
-
-    // 추후 사용자 이름, 날씨, 스케줄 한꺼번에 가져오도록 수정
     val signInCallback = DeliverCallback { consumerTag, delivery ->
         message = String(delivery.body)
 
@@ -106,10 +86,6 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
         // 매개변수로 context 전달받아 intent 수행.
         //mainIntent.putExtra("userName",userName)
         MainActivity.userName = userName
-//        if(signInStatus == 3) {
-//            progressDialog.dismiss()
-//            context.startActivity(mainIntent)
-//        }
     }
 
     // 예외 상황에 관한 try catch문 추가가 필요할듯 (ex : 통신이 끊겼을 때?)
@@ -174,10 +150,6 @@ class SigninThread(uid : String, mContext : Context) : MQTT_Thread() {
             )
             signInStatus += 1
             Log.d("signInStatus","$signInStatus")
-//            if (signInStatus == 3) {
-//                progressDialog.dismiss()
-//                context.startActivity(mainIntent)
-//            }
             Log.d("FB applianceStatus", "${MainActivity.applianceStatus}")
         }.addOnFailureListener {
             // 파이어베이스에서 데이터 수신 실패시
