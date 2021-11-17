@@ -14,6 +14,8 @@ import com.google.firebase.ktx.Firebase
 import com.psw9999.car2smarthome.Adapter.AlarmAdapter
 import com.psw9999.car2smarthome.Adapter.SchedulesAdapter
 import com.psw9999.car2smarthome.data.alarmData
+import com.psw9999.car2smarthome.data.mode
+import com.psw9999.car2smarthome.data.scheduleData
 import com.psw9999.car2smarthome.databinding.FragmentAlarmBinding
 
 
@@ -23,42 +25,41 @@ private lateinit var binding : FragmentAlarmBinding
 private val firebaseDB = Firebase.firestore
 
 class AlarmFragment : Fragment() {
-    private var alarmDatas = mutableListOf<alarmData>()
-    private var initialFlag : Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // 7. 파이어베이스의 클라우드에서 알람 정보 가져오기
-        firebaseDB.collection("appliance_alarm")
-            .addSnapshotListener { snapshots, e ->
-                if( e != null) {
-                    Log.w("AlarmFragment",e)
-                    return@addSnapshotListener
-                }
-
-                for (dc in snapshots!!.documentChanges) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        if (!initialFlag)
-                        {
-                            alarmDatas.add(dc.document.toObject<alarmData>())
-                        }
-                        else {
-                            alarmDatas.add(0, dc.document.toObject<alarmData>())
-                            alarmAdapter.notifyItemChanged(0)
-                        }
-                    }
-                }
-                initialFlag = true
-                alarmAdapter.notifyDataSetChanged()
-            }
-    }
+    private var alarmDatas = ArrayDeque<alarmData>()
+    private var initialFlag : Boolean = true
+    //TODO : 프래그먼트 두 번 호출되는 현상 있음. 확인필요
+    private var befAlarmData : alarmData? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("onCreateView","onCreateView")
         binding = FragmentAlarmBinding.inflate(inflater, container, false)
+
+         firebaseDB.collection("appliance_alarm")
+             .addSnapshotListener { snapshots, e ->
+                 if (e != null) {
+                     Log.w("AlarmFragment", e)
+                     return@addSnapshotListener
+                 }
+                 for (dc in snapshots!!.documentChanges) {
+                     if (dc.type == DocumentChange.Type.ADDED) {
+                         if (initialFlag) {
+                             alarmDatas.add(dc.document.toObject())
+                         } else {
+                             if (befAlarmData != dc.document.toObject()) {
+                                 alarmDatas.addFirst(dc.document.toObject())
+                             }
+                             befAlarmData = dc.document.toObject()
+                         }
+                     }
+                 }
+                 initialFlag = false
+                 alarmAdapter.notifyDataSetChanged()
+             }
+        initialFlag = true
         initRecyclerView(requireContext())
         return binding.root
     }

@@ -61,9 +61,8 @@ class SignupActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    // 비밀번호 서로 다르면 해당 editText값 초기화시키기
-                    binding.SignupPasswordInput.setText(null)
-                    binding.SignupPasswordCheckInput.setText(null)
+                    binding.SignupPasswordInput.text = null
+                    binding.SignupPasswordCheckInput.text = null
                 }
             }
         }

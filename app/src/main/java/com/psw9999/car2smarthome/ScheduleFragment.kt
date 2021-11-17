@@ -11,19 +11,9 @@ import com.psw9999.car2smarthome.Adapter.SchedulesAdapter
 import com.psw9999.car2smarthome.data.scheduleData
 import com.psw9999.car2smarthome.databinding.FragmentThirdBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 private lateinit var schedulesAdapter: SchedulesAdapter
 private lateinit var binding: FragmentThirdBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ThirdFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ThirdFragment : Fragment() {
     lateinit var scheduleIntent : Intent
 

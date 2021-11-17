@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        binding.testButton.setOnClickListener {
+        binding.SmarthomeImage.setOnClickListener {
             signIn("psw1234@naver.com", "123412")
         }
     }
@@ -118,10 +118,10 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        val userInfo : FirebaseUser? = Loginauth.currentUser
+                        val userInfo = Loginauth.currentUser as FirebaseUser
                         binding.editTextID.text = null
                         binding.editTextPassword.text = null
-                        val signInThread = SigninThread(userInfo!!.uid)
+                        val signInThread = SigninThread(userInfo.uid)
                         signInThread.start()
                     } else {
                         loginFailFlag = true

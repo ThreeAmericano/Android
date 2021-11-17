@@ -123,8 +123,6 @@ class SecondFragment : Fragment(){
         initRecyclerView(context)
     }
 
-
-
     companion object {
         var modeDatas = mutableListOf<mode>()
     }
